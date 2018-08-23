@@ -1,0 +1,1 @@
+Novo;Salvar;Abrir;Anular;Refazer;ampliar;diminuir;Avançar;Voltar
