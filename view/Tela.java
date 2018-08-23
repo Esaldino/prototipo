@@ -91,6 +91,7 @@ import javafx.util.StringConverter;
 import prototipo.control.Avaliador;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory;
 /**
  *
  * @author Esaldino
@@ -407,18 +408,18 @@ public class Tela extends Application{
 		Label labelX = getLabel("X");
 		Label labelY = getLabel("Y");
 
-		TextField tfx = getTextNumero;
-		TextField tfy = getTextNumero();
+		Spinner tfx = getSpinner();
+		Spinner tfy = getSpinner();
 		
 		Label labelW = getLabel("Largura");
 		Label labelH = getLabel("Altura");
 
 
-		TextField tfW = getTextNumero();
-		TextField tfH = getTextNumero();
+		Spinner tfW = getSpinner();
+		Spinner tfH = getSpinner();
 		
 		
-		av.setControlGeometria();
+		av.setControlGeometria(tfx,tfy,tfW,tfH);
 		GridPane gridToll = getGrid(false);
 	
 		VBox v1 = getTool(labelX,tfx);
@@ -583,12 +584,11 @@ public class Tela extends Application{
         return vbox;
     }
 	
-	public TextField getTextNumero(){
-		TextField textFieldDouble = new TextField();
-		TextFormatter<Double> textFieldDouble = new TextFormatter<>(new DoubleStringConverter());
-		tfx.setTextFormatter( textFieldDouble );
-		textFieldDouble.getStyleClass().add("toll");
-		return textFieldDouble;
+	public Spinner getSpinner(){
+		Spinner spinner = new Spinner(new DoubleSpinnerValueFactory(0,cp.getWidth(),0));
+		spinner.setEditable(true);
+		spinner.getStyleClass().add("toll");
+		return spinner;
 	}
     public Label getLabel(String text ){
     	Label label = new Label(text);

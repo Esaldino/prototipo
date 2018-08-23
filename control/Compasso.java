@@ -119,22 +119,18 @@ public class Compasso {
 	public void getScala(DoubleProperty escalaView){
 		escala = new SimpleDoubleProperty(1);
 		escala.bind(escalaView);
-		//escala.addListener( (ob,ol,nw)->System.out.println( "Mudou as escala : " +nw  ));
 	}
 	
 	public void addAtivado(){
 		ativados +=1;
-		System.out.println( "add : " +ativados  );
 	}
 	public void subAtivado(){
 		if( ativados>0)
 			ativados-=1;
-		System.out.println( "sub : " +ativados  );
 	}
 	
 	public void setIterador(int value){
         this.iterador = value;
-	//	System.out.println("iterador mudou : " + value);
     }
     
     public int getIterador(){
@@ -154,6 +150,7 @@ public class Compasso {
 		});	
 
 		folha.setOnMouseMoved( mouseEvent->{ 
+			setPositionMouse(mouseEvent.getX(),mouseEvent.getY());
 		//	System.out.println("movendo x " + mouseEvent.getX() + " movendo y " + mouseEvent.getY() );
 		});
         
@@ -454,25 +451,21 @@ public class Compasso {
 		}
 	}
 	
-	public void process( Chapa chapa,Delimitador deli){
+	public void process( Chapa chapa){
 		
 		System.out.println("Processa");
+		Delimitador deli = chapa.get();
 		if( !keyCtr  )
 			desmarcarTodos();
 		
 		if( !deli.isAtivado() ){
 			deli.ativar();
-			if( ativados < 1 )
-				setInstancia(chapa);
+			av.testar(chapa);
 			addAtivado();//determina o numero de objetos marcador
 		}
 		
 	}
 
-	public void setInstancia(Chapa chapa){
-		 av.testar(chapa.getControl());
-	}
-	
 	public void criar(Control figura){
 		
 		Chapa chapa  = new Chapa();
@@ -481,10 +474,9 @@ public class Compasso {
 		figura.getTransforms().addAll(r);
 		Delimitador deli  = new Delimitador( figura.getPrefWidth() , figura.getPrefHeight() );
 		chapa.addi(figura,deli);
-		process(chapa,deli);
-		
 		gc.add(chapa);
 		folha.desenhar(chapa);
+		process(chapa);
 		
 		deli.setOnMousePressed(mouseEvent->{
 
@@ -498,7 +490,7 @@ public class Compasso {
 			pt = new Point2D(figura.getLayoutX(),figura.getLayoutY());
 
 			if( mouseEvent.getButton() == MouseButton.PRIMARY && novo == 0 && !deli.isAtivado() )
-				process(chapa,deli);
+				process(chapa);
         });
 
         

@@ -9,10 +9,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.Label;
-import javafx.scene.control.Control;
 import javafx.scene.control.ComboBox;
-import javafx.beans.property.StringProperty;
+import javafx.scene.control.Spinner;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.StringProperty;
+import prototipo.model.Chapa;
+import javafx.scene.Node;
 
 public class  Avaliador{
 	private TextField tf;
@@ -29,25 +31,28 @@ public class  Avaliador{
 		controlTexto = new ControlTexto(tf);
 	}
 	
-	public void setControlGeometria(DoubleProperty ... dp){
+	public void setControlGeometria(Spinner ... dp){
 		controlG = new ControlGeometria(dp);
+		System.out.println("ativou");
 	}
 	
-	public void testar(Control node){
-
-		if( node instanceof TextField  ){
+	public void testar(Chapa chapa){
+			controlG.link(chapa);
+		
+		Node figura = chapa.getControl();
+		if( figura instanceof TextField  ){
 			tf.setText("Text-field");
 			controlTexto.limpar();
-			controlTexto.link( ((TextField)node).promptTextProperty() );
-		}else if( node instanceof Button ){
+			controlTexto.link( ((TextField)figura).promptTextProperty() );
+		}else if( figura instanceof Button ){
 			controlTexto.limpar();
 			tf.setText("Button");
-			controlTexto.link( ((Button)node).textProperty() );
-		}else if( node instanceof Label ){
+			controlTexto.link( ((Button)figura).textProperty() );
+		}else if( figura instanceof Label ){
 			controlTexto.limpar();
 			tf.setText("Label");
-			controlTexto.link( ((Label)node).textProperty() );
-		}else if( node instanceof ComboBox ){
+			controlTexto.link( ((Label)figura).textProperty() );
+		}else if( figura instanceof ComboBox ){
 			tf.setText("Combo-box");
 		}
 		
