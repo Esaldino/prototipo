@@ -107,4 +107,11 @@ public class GestorChapa {
     public long size(){
         return gestorChapa.size();
     }
+	
+	public void actulizarFigura(){
+		for(Chapa chapa :getAll() ){
+            setPosition(chapa);
+			setDimesion(chapa);
+        }
+	}
 }

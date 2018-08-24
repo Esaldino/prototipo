@@ -188,7 +188,7 @@ public class Compasso {
                 panesMarcados.clear();
      
 			
-		//	actulizarFigura();
+		//	gc.actulizarFigura();
         });
         
         folha.setOnMouseDragged( mouseEvent->{
@@ -220,12 +220,6 @@ public class Compasso {
             }
         });
     }
-	
-	public void last(){
-		return gc;
-	}
-
-      
 	  
      //calcula os pontos extremos da chapa
     public void setCordernadas( Chapa chapa ){
@@ -431,9 +425,34 @@ public class Compasso {
 			double rotacao =r.getAngle()+angle;
 			if(rotacao>360)
 				rotacao=90;
+			else if(rotacao==-360)
+				rotacao=0;
+				
+			
+			System.out.println(rotacao);
+			switch(Double.valueOf(rotacao).intValue()){
+				case 0:
+				case 360:figura.setLayoutX(0);
+						 figura.setLayoutY(0);
+						 break;
+				case -270:
+				case 90:figura.setLayoutX(figura.getPrefHeight());
+						figura.setLayoutY(0);
+						break;
+				case -180:
+				case 180:figura.setLayoutX(figura.getPrefWidth());
+						 figura.setLayoutY(figura.getPrefHeight());
+						 break;
+				case -90:
+				case 270:figura.setLayoutX(0);
+						 figura.setLayoutY(figura.getPrefWidth());
+						break;
+			}
 			r.setAngle(rotacao);
 			deli.actualiza(figura.getBoundsInParent());
-			actulizarFigura();
+			System.out.println(gc.getPosition(chapa));
+			System.out.println(deli.getLayoutBounds());
+			gc.actulizarFigura();
         }
     }
 	
@@ -467,7 +486,7 @@ public class Compasso {
 		
 		if( !deli.isAtivado() ){
 			deli.ativar();
-			av.testar(chapa);
+			av.testar(chapa,gc);
 			addAtivado();//determina o numero de objetos marcador
 		}
 		
@@ -505,7 +524,7 @@ public class Compasso {
 
         EventHandler<MouseEvent> eventoDesfito = (mouseEvent)->{
             //actualiza as posicao e a rotacao das figuras
-            actulizarFigura();
+            gc.actulizarFigura();
 			deli.actualiza(figura.getBoundsInParent());
             ctr=false;
 			setIterador(9);//ativa o deli
@@ -655,7 +674,7 @@ public class Compasso {
 							case 270:figura.setPrefWidth(novaAltura);
 						}
 						
-						ctr=true;
+				//		ctr=true;
 						break;
                 case 2: //Esquerdo - desloca a largura -trabalhando com o eixo X
 						novaLargura = d2d.getWidth()-dx;
@@ -676,7 +695,7 @@ public class Compasso {
 							case 90:figura.setPrefHeight(novaLargura);
 						}
 						
-						ctr=true;
+				//		ctr=true;
                         break;
                 case 3: //Baixo -> Descola a altura - trabalhando com a altura 
 						novaAltura = d2d.getHeight()+dy;
@@ -699,7 +718,7 @@ public class Compasso {
 						}
 						
 						
-						ctr=true;
+				//		ctr=true;
                         break;
 						
                 case 4: //direito - > Desloca a largura - trabalhando a largura
@@ -764,7 +783,7 @@ public class Compasso {
 									 figura.setPrefHeight( novaLargura );
 						}							
 								
-						ctr=true;
+				//		ctr=true;
                         break;
                 case 6: //NE - desloca a altura e largura-trabalhando com eio Y e largura
 						novaAltura = d2d.getHeight()-dy;
@@ -899,7 +918,7 @@ public class Compasso {
 									figura.setPrefHeight(novaLargura);
 							
 						}
-					    ctr=true;
+			//		    ctr=true;
             }
 			
 	}
@@ -916,12 +935,6 @@ public class Compasso {
 	}
 	
 
-	public void actulizarFigura(){
-		out.println("Actualizou");
-		for(Chapa chapa :gc.getAll() ){
-            gc.setPosition(chapa);
-			gc.setDimesion(chapa);
-        }
-	}
+	
 
 }

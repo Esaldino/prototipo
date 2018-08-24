@@ -36,9 +36,9 @@ public class  Avaliador{
 		System.out.println("ativou");
 	}
 	
-	public void testar(Chapa chapa){
+	public void testar(Chapa chapa,GestorChapa gc){
 		//ativa as proriedades geometria
-		controlG.link(chapa);
+		controlG.link(chapa,gc);
 		//Ativas as outroas propriedades
 		Node figura = chapa.getControl();
 		if( figura instanceof TextField  ){

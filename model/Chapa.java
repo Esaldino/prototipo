@@ -6,9 +6,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.control.Control;
 import prototipo.control.Util;
 import javafx.scene.Node;
-public class Chapa extends Group{
+public class Chapa extends AnchorPane{
 
-	
+	public Chapa(){
+		
+		setStyle("-fx-background-color:blue");
+		setPrefSize(300,300);
+	}
 	public Delimitador get(){
 		return (Delimitador) getChildren().get(1);
 	}

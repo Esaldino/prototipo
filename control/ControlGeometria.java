@@ -3,20 +3,15 @@ package prototipo.control;
 import javafx.scene.control.Spinner;
 import prototipo.model.Chapa;
 import prototipo.model.Delimitador;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.control.Control;
+
 public class ControlGeometria{
 	private Spinner dx;
 	private Spinner dy;
 	private Spinner dw;
 	private Spinner dh;
-	private IntegerProperty x;
 	
-	public IntegerProperty semaforoX(){
-		if( semaforoX==null)
-			x = new SimpleIntegerProperty();
-		return x;
-	}
+
 	
 	public ControlGeometria(Spinner ... d ){
 		dx = d[0];
@@ -26,21 +21,58 @@ public class ControlGeometria{
 			//System.out.println(dx);
 	}	
 	
-	public void link( Chapa chapa ){
+	public void link( Chapa chapa , GestorChapa gc){
+		
+		
 		Delimitador deli = chapa.get();
-		semaforoX.set(0);
+		Control figura = chapa.getControl();
 		
 		dx.getValueFactory().setValue( chapa.getLayoutX()+deli.getX());
 		dy.getValueFactory().setValue( chapa.getLayoutX()+deli.getY());
-		/*
-		chapa.layoutXProperty().addListener(( obs,olv,nw)->{
-			dx.getValueFactory().setValue( (double)nw+deli.getX());
-		});*/
+		dh.getValueFactory().setValue( deli.getHeight());
+		dw.getValueFactory().setValue( deli.getWidth());
 		
-		chapa.layoutXProperty().addListener(( obs,olv,nw)->{
-			semaforoX.set(1);
-			//dy.getValueFactory().setValue( (double)nw+deli.getY());
+		dx.setOnMouseClicked( mouseEvent->{
+			chapa.setLayoutX((double)dx.getValue()+deli.getX());
+			gc.actulizarFigura();
 		});
+		
+		dx.getEditor().setOnKeyReleased( mouseEvent->{
+			chapa.setLayoutX((double)dx.getValue()+deli.getX());
+			gc.actulizarFigura();
+		});
+		
+		dy.setOnMouseClicked( mouseEvent->{
+			chapa.setLayoutY((double)dy.getValue()+deli.getY());
+			gc.actulizarFigura();
+		});
+		
+		dy.getEditor().setOnKeyReleased( mouseEvent->{
+			chapa.setLayoutY((double)dy.getValue()+deli.getY());
+			gc.actulizarFigura();
+		});
+		
+		
+		dw.setOnMouseClicked( mouseEvent->{
+			deli.setHeight((double)dx.getValue());
+			gc.actulizarFigura();
+		});
+		
+		dw.getEditor().setOnKeyReleased( mouseEvent->{
+			deli.setHeight((double)dx.getValue());
+			gc.actulizarFigura();
+		});
+		
+		dh.setOnMouseClicked( mouseEvent->{
+			deli.setWidth((double)dx.getValue());
+			gc.actulizarFigura();
+		});
+		
+		dh.getEditor().setOnKeyReleased( mouseEvent->{
+			deli.setWidth((double)dx.getValue());
+			gc.actulizarFigura();
+		});
+	
 	
 
 	}
