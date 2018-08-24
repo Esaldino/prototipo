@@ -8,6 +8,7 @@ package prototipo.control;
 import javafx.scene.control.Control;
 import static javafx.application.Platform.runLater;
 import java.util.LinkedList;
+import javafx.event.EventHandler;
 
 import javafx.scene.control.ContextMenu;
 
@@ -45,6 +46,7 @@ import prototipo.model.Marcador;
 import javafx.scene.Group;
 
 import javafx.scene.transform.Scale;
+import javafx.scene.shape.Circle;
 //Controladores de propriedades
 
 
@@ -131,6 +133,7 @@ public class Compasso {
 	
 	public void setIterador(int value){
         this.iterador = value;
+		System.out.println("Iterador : " + value ); 
     }
     
     public int getIterador(){
@@ -468,53 +471,55 @@ public class Compasso {
 
 	public void criar(Control figura){
 		
+		
+		
 		Chapa chapa  = new Chapa();
 		Rotate r = new Rotate(0,0,0);
-	
+		
+		final int tam =7;
 		figura.getTransforms().addAll(r);
 		Delimitador deli  = new Delimitador( figura.getPrefWidth() , figura.getPrefHeight() );
+		deli.pontosTrans(tam);
+		Circle[] circle = deli.getCircles();
+		deli.setCursor( Cursor.MOVE );	
 		chapa.addi(figura,deli);
+		chapa.addi(circle);
 		gc.add(chapa);
 		folha.desenhar(chapa);
 		process(chapa);
 		
 		deli.setOnMousePressed(mouseEvent->{
-
-			System.out.println("Pressionou na marcador");
 			ctr = true;
 			double x = mouseEvent.getScreenX()/escala.get();
 			double y = mouseEvent.getScreenY()/escala.get();
 			pontos = new Point2D(x,y);
-			deli.actualiza(figura.getBoundsInParent());
-			pontosMarcador = new Point2D(deli.getX(),deli.getY());//guarda a pos do delimitador
-			pt = new Point2D(figura.getLayoutX(),figura.getLayoutY());
-
+		//	deli.actualiza(figura.getBoundsInParent());
+		/*	pontosMarcador = new Point2D(deli.getX(),deli.getY());//guarda a pos do delimitador
+			pt = new Point2D(figura.getLayoutX(),figura.getLayoutY());*/
+			novo=0;
+			setIterador(novo);
 			if( mouseEvent.getButton() == MouseButton.PRIMARY && novo == 0 && !deli.isAtivado() )
 				process(chapa);
         });
 
-        
-       deli.setOnMouseReleased(mouseEvent->{
+        EventHandler<MouseEvent> eventoDesfito = (mouseEvent)->{
             //actualiza as posicao e a rotacao das figuras
             actulizarFigura();
 			deli.actualiza(figura.getBoundsInParent());
             ctr=false;
-			 setIterador(9);//ativa o deli
+			setIterador(9);//ativa o deli
 			
-        });
+        };
+		deli.setOnMouseReleased(eventoDesfito);
 		
 		deli.setOnMouseDragged(mouseEvent->{
 			
-			if( mouseEvent.getButton() != MouseButton.PRIMARY )
-				return;
+			if( mouseEvent.getButton() == MouseButton.PRIMARY ){
 				double x = mouseEvent.getScreenX()/escala.get();
 				double y = mouseEvent.getScreenY()/escala.get(); 
 				dx = x - pontos.getX(); 
 				dy = y - pontos.getY();
-			if( novo==0){
 				moverFigura(dx,dy);
-			} else if(novo>0&&novo<9){
-				redimensionarDelimitador(dx,dy,chapa);
 			} 
         });//onMouseDragged
         
@@ -537,81 +542,78 @@ public class Compasso {
 		
 		
 
-        //calcula os limites latereis das figuras
-        deli.setOnMouseEntered( mouseEvent->{
-			//calcula os pontos extremos da chapa
-			
-			if(!deli.isAtivado())
-				return;
-			
-			Dimension2D dm = gc.getDimension(chapa);
-			cordenadas[0] =  new Point2D(deli.getValueX(),deli.getValueY());//cima
-			cordenadas[1] =  new Point2D(deli.getValueX()+dm.getWidth(),deli.getValueY());//esquerdo
-			cordenadas[2] =  new Point2D(deli.getValueX(),deli.getValueY()+dm.getHeight() );//baixo
-			cordenadas[3] =  new Point2D(deli.getValueX()+dm.getWidth(),deli.getValueY()+dm.getHeight());//direito*/
-       
-	   });
-        
-        deli.setOnMouseMoved( mouseEvent->{
-
-             if( ctr )
-                 return;
-			double x =  mouseEvent.getX();                         
-			double y =  mouseEvent.getY();
-			
-            int sigma = 10;
-            //determina que o cursor esta por cima,baixo e nas laterais da figura
-			 if( (x > cordenadas[0].getX()-sigma && x < cordenadas[0].getX()+sigma)
-                    &&( y>cordenadas[0].getY()-sigma && y<cordenadas[0].getY()+sigma) ){
-					novo = 5;
-				//	out.println("Chegou no pontos P0");
-					deli.setCursor( Cursor.NW_RESIZE );
-            } else  if( (x > cordenadas[1].getX()-sigma && x < cordenadas[1].getX()+sigma)
-                    &&( y>cordenadas[1].getY()-sigma && y<cordenadas[1].getY()+sigma)){
-					novo=6;
-               // out.println("Chegou no pontos P1");
-					deli.setCursor( Cursor.NE_RESIZE  );
-            }else  if((x > cordenadas[2].getX()-sigma && x < cordenadas[2].getX()+sigma)
-                    &&( y>cordenadas[2].getY()-sigma && y<cordenadas[2].getY()+sigma)){
-					novo=7;
-            //    out.println("Chegou no pontos P2");
-					deli.setCursor( Cursor.SW_RESIZE );
-            }else  if( (x > cordenadas[3].getX()-sigma && x < cordenadas[3].getX()+sigma)
-                    &&( y>cordenadas[3].getY()-sigma && y<cordenadas[3].getY()+sigma)){
-					novo=8;
-            //    out.println("Chegou no pontos P3");
-					deli.setCursor( Cursor.SE_RESIZE );
-            }else if(cordenadas[0].getX() - x < 0 && cordenadas[0].getY()== y  ){
-               if( cordenadas[1].getX() - x > 0 && cordenadas[1].getY()== y  ){
-					novo=1;
-                    //cima
-                    deli.setCursor( Cursor.N_RESIZE );
-               }
-            }else if( cordenadas[0].getX() == x && cordenadas[0].getY() -  y < 0 ){
-                if( cordenadas[2].getX()== x  && cordenadas[2].getY() - y > 0 ){
-					novo=2;
-                     //lado esquerdo
-                    deli.setCursor( Cursor.H_RESIZE );
-                }
-            } else if( cordenadas[2].getX() - x < 0 && cordenadas[2].getY() == y  ){
-                if( cordenadas[3].getX() - x > 0 && cordenadas[3].getY() == y ){
-					novo=3;
-                 // BAIXO
-                    deli.setCursor( Cursor.V_RESIZE );
-                }
-            }else if( cordenadas[1].getX() == x && cordenadas[1].getY() - y < 0  ){
-                if( cordenadas[3].getX() == x  && cordenadas[3].getY() - y > 0 ){
-					novo=4;
-                    //lado direiro
-                    deli.setCursor( Cursor.H_RESIZE );
-                }
-            }else{
-				if(deli.isAtivado())
-					deli.setCursor( Cursor.MOVE );	
-				novo=0;
+		EventHandler<MouseEvent> eventoMov = (mouseEvent)->{
+            if( ctr )
+                return;
+			int i=0;
+			while( i<tam ){	
+				if(mouseEvent.getSource()==circle[i]){
+					break;
+				}else
+					i++;
 			}
-			setIterador(novo);
-        });	
+			switch(i){
+				case 0: //	out.println("Chegou no pontos P0");
+						novo = 5;
+						break;
+				case 1:	// out.println("Chegou no pontos P1");
+						novo=6;
+						break;
+				case 2: //    out.println("Chegou no pontos P2");
+						novo=7;
+						break;
+				case 3: //out.println("Chegou no pontos P3");
+						novo=8;
+						break;
+				case 4://esquerdo
+						novo=2;
+						break;
+				case 5://lado direiro
+						novo=4;
+						break;
+				case 6:	 //cima				   
+						novo=1;
+						break;
+				
+			/*	case 7:// BAIXO
+						novo=3;
+						break;*/
+				
+			}
+			System.out.println( " enquanto : " + i);
+			setIterador(novo);	
+		};
+		 
+		 
+		EventHandler<MouseEvent> eventoPressed = (mouseEvent)->{ 
+			ctr=true;
+			double x = mouseEvent.getScreenX()/escala.get();
+			double y = mouseEvent.getScreenY()/escala.get();
+			pontos = new Point2D(x,y);
+			pontosMarcador = new Point2D(deli.getX(),deli.getY());//guarda a pos do delimitador
+			pt = new Point2D(figura.getLayoutX(),figura.getLayoutY());
+		};
+		
+		
+		
+		EventHandler<MouseEvent> eventoDrag =(mouseEvent)->{ 
+			if( mouseEvent.getButton() == MouseButton.PRIMARY ){
+				double x = mouseEvent.getScreenX()/escala.get();
+				double y = mouseEvent.getScreenY()/escala.get(); 
+				dx = x - pontos.getX(); 
+				dy = y - pontos.getY();
+				redimensionarDelimitador(dx,dy,chapa);
+			}
+		};
+		
+		for(Circle c: circle){
+			c.setOnMouseEntered(eventoMov);
+			c.setOnMousePressed( eventoPressed );
+			c.setOnMouseDragged( eventoDrag );
+			c.setOnMouseReleased(eventoDesfito);
+		}
+			//calcula os pontos extremos da chapa
+
 	}
 	
 
@@ -630,7 +632,7 @@ public class Compasso {
 			double novaLargura=0;
 			double novaAltura=0;
 			double novoY =0;
-			double intervalo = 45;
+			double intervalo = 45;//limite de redimensionamento
 			double novoX=0;
             switch( getIterador() ){
                 case 1:// CIMA ->desloca a altura - trabalhando com a cordenada Y

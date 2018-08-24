@@ -20,7 +20,7 @@ public class ControlGeometria{
 	
 	public void link( Chapa chapa ){
 		Delimitador deli = chapa.get();
-		
+	/*	
 		dx.getValueFactory().setValue( chapa.getLayoutX()+deli.getX());
 		dy.getValueFactory().setValue( chapa.getLayoutX()+deli.getY());
 		
@@ -32,9 +32,9 @@ public class ControlGeometria{
 			dy.getValueFactory().setValue( (double)nw+deli.getY());
 		});
 		
-		dx.valueProperty().addListener(( obs,olv,nw)->{
-			dy.getValueFactory().setValue( (double)nw);
+		dx.valueProperty().addListener( ( obs,olv,nw)->{
+			chapa.setLayoutX( (double)nw+deli.getX() );
 		});
-
+*/
 	}
 }

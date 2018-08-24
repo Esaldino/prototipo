@@ -16,12 +16,10 @@ public class Chapa extends Group{
 	public Control getControl(){
 		return (Control) getChildren().get(0);
 	}
-	
-/*	public void definirBorda(int valueBorder, int raddii,Color cor){
-		setBorder(Util.bordas(cor,raddii,valueBorder));
-	}*/
+
 	public void addi(Node...figuras){
 		getChildren().addAll(figuras);
 	}
+
 	
 }
