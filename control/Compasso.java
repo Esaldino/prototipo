@@ -493,9 +493,6 @@ public class Compasso {
 			double x = mouseEvent.getScreenX()/escala.get();
 			double y = mouseEvent.getScreenY()/escala.get();
 			pontos = new Point2D(x,y);
-		//	deli.actualiza(figura.getBoundsInParent());
-		/*	pontosMarcador = new Point2D(deli.getX(),deli.getY());//guarda a pos do delimitador
-			pt = new Point2D(figura.getLayoutX(),figura.getLayoutY());*/
 			novo=0;
 			setIterador(novo);
 			if( mouseEvent.getButton() == MouseButton.PRIMARY && novo == 0 && !deli.isAtivado() )
@@ -913,6 +910,7 @@ public class Compasso {
 		out.println("x  : " + deli.getLayoutBounds() );
 		
 	}
+	
 
 	public void actulizarFigura(){
 		out.println("Actualizou");

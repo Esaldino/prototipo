@@ -37,8 +37,9 @@ public class  Avaliador{
 	}
 	
 	public void testar(Chapa chapa){
-			controlG.link(chapa);
-		
+		//ativa as proriedades geometria
+		controlG.link(chapa);
+		//Ativas as outroas propriedades
 		Node figura = chapa.getControl();
 		if( figura instanceof TextField  ){
 			tf.setText("Text-field");

@@ -77,10 +77,6 @@ import java.awt.GraphicsDevice;
 import static java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment;
 import java.util.Arrays;
 
-import java.util.Random;
-import javafx.concurrent.Task;
-import javafx.concurrent.Worker.State;
-
 import java.util.concurrent.Executors;
 import javafx.scene.transform.Scale;
 import java.util.concurrent.ExecutorService;
@@ -92,6 +88,7 @@ import prototipo.control.Avaliador;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory;
+import prototipo.control.ControlTela;
 /**
  *
  * @author Esaldino
@@ -103,8 +100,8 @@ public class Tela extends Application{
 	private VBox paneBottom;
 	private Stage stagePrincipal;
 	private BorderPane root;
-	private ExecutorService executor;
-	private Tarefa tarefa;
+//	private ExecutorService executor;
+	//private Tarefa tarefa;
 	GridPane grid;
 	ColumnConstraints c2;
 	RowConstraints r2;
@@ -145,9 +142,9 @@ public class Tela extends Application{
 	@Override						   
     public void init(){
 		
-		executor = Executors.newCachedThreadPool();
+	//	executor = Executors.newCachedThreadPool();
         cp =  new Compasso();
-		tarefa = new Tarefa();
+		//tarefa = new Tarefa();
 		try{
 			descFile = Util.getDescricao(getClass().getResource("nota/desc1.txt").toURI());
 			file     = Util.getFile(getClass().getResource("icones").toURI());
@@ -155,11 +152,12 @@ public class Tela extends Application{
 			ex.printStackTrace();
 			System.exit(1);
 		}
+		ControlTela ct = new ControlTela(cp);
     }
 	
 	@Override
 	public void stop(){
-		executor.shutdown();
+		ct.desligar();
 	}
    
     @Override
@@ -173,32 +171,10 @@ public class Tela extends Application{
 									getClass().getResource("estilo/regua.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
-        scene.setOnKeyPressed( keyEvent->{
-            teclado(keyEvent.getCode(),true);
-        });
-		
-		scene.setOnMouseMoved( mouseEvent->{
-			if( mouseEvent.getButton()==MouseButton.MIDDLE)
-				System.out.println("moveu do meio");
-		});
-        
-        scene.setOnKeyReleased( keyEvent->{
-            teclado(keyEvent.getCode(),false);     
-        });
+		ct.sceneEvent(scene);
 
 		
     }
-	
-	
-    
-    public void teclado(KeyCode keyCode,boolean value){
-        if( keyCode == KeyCode.CONTROL ){
-             cp.setKeyCtr(value);
-        } else if(keyCode == KeyCode.ESCAPE  && value){
-            cp.desmarcarTodos();
-        }
-    }
-    
     
     public void gerenciarRoot(BorderPane root){
         root.setTop( getTop() ); 
@@ -244,15 +220,14 @@ public class Tela extends Application{
 		r2 = new RowConstraints(300,cp.getHeight(),Double.MAX_VALUE);
 		
 		escala = new SimpleDoubleProperty();
-		cp.getScala(escala);
-		
-		escala.addListener( (obsv,olv,nv)->{
-			
+		cp.scalaEvent(escala,c2,r2);
+	/*	escala.addListener( (obsv,olv,nv)->{
 			c2.setPrefWidth( cp.getWidth()*(double)nv  );
 			r2.setPrefHeight( cp.getWidth()*(double)nv   );
-		});
+		});*/
 		
-		Task<ArrayList<BorderPane>> task1 = tarefa.reguaH(cp.getWidth());
+		ct.tarefasRegua(hboxRegua,vboxRegua);
+	/*	Task<ArrayList<BorderPane>> task1 = tarefa.reguaH(cp.getWidth());
 			task1.stateProperty().addListener((obs,old,nw)->{
 				if(nw==State.SUCCEEDED ){
 					hboxRegua.getChildren().addAll( task1.getValue() );
@@ -266,7 +241,7 @@ public class Tela extends Application{
 					vboxRegua.getChildren().addAll( task2.getValue() );
 				}
 			});
-			executor.submit(task2);
+			executor.submit(task2);*/
 			
 		escala.set(1d);
 		grid = new GridPane();
@@ -329,7 +304,8 @@ public class Tela extends Application{
 			b[i] = getImageMenu(file[i],descFile[i]);
 			tl.getChildren().add(b[i]);
 		}
-
+		
+		ct.eventosTop(b);
 		b[5].setOnMouseClicked(actionEvent->escala.set(escala.get()+0.5));
 
 		b[6].setOnMouseClicked(actionEvent->escala.set(escala.get()-0.5));

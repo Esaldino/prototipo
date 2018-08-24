@@ -26,15 +26,15 @@ public class ControlGeometria{
 		
 		chapa.layoutXProperty().addListener(( obs,olv,nw)->{
 			dx.getValueFactory().setValue( (double)nw+deli.getX());
-		});
+		});*/
 		
 		chapa.layoutYProperty().addListener(( obs,olv,nw)->{
 			dy.getValueFactory().setValue( (double)nw+deli.getY());
 		});
 		
 		dx.valueProperty().addListener( ( obs,olv,nw)->{
-			chapa.setLayoutX( (double)nw+deli.getX() );
+			chapa.setLayoutX( (double)nw);
 		});
-*/
+
 	}
 }
