@@ -610,7 +610,8 @@ public class Compasso {
 			double y = mouseEvent.getScreenY()/escala.get();
 			pontos = new Point2D(x,y);
 			pontosMarcador = new Point2D(deli.getX(),deli.getY());//guarda a pos do delimitador
-			pt = new Point2D(figura.getLayoutX(),figura.getLayoutY());
+		//	pt = new Point2D(figura.getLayoutX(),figura.getLayoutY());
+			pt = new Point2D(chapa.getLayoutX(),chapa.getLayoutY());
 		};
 		
 		
@@ -656,21 +657,22 @@ public class Compasso {
             switch( getIterador() ){
                 case 1:// CIMA ->desloca a altura - trabalhando com a cordenada Y
 						novaAltura = d2d.getHeight()-dy;
-						novoY      = pontosMarcador.getY()+dy;
+					//	novoY      = pontosMarcador.getY()+dy;
 						
 						if( novaAltura<=intervalo )
 							return;
 						
 						deli.setAltura(novaAltura);
-						deli.setPontoY(novoY);
+					//	deli.setPontoY(novoY);
 						
 						
 						switch(rotacao){
 							case 0:
-							case 360:figura.setLayoutY(pt.getY()+dy);
+							case 360:pane.setLayoutY(pt.getY()+dy);
+						//	case 360:figura.setLayoutY(pt.getY()+dy);
 							case 180:figura.setPrefHeight(novaAltura);
 									 break;
-							case 90:figura.setLayoutY(pt.getY()+dy);
+							case 90:pane.setLayoutY(pt.getY()+dy);
 							case 270:figura.setPrefWidth(novaAltura);
 						}
 						
@@ -678,26 +680,29 @@ public class Compasso {
 						break;
                 case 2: //Esquerdo - desloca a largura -trabalhando com o eixo X
 						novaLargura = d2d.getWidth()-dx;
-						novoX = pontosMarcador.getX()+dx;
+					//	novoX = pontosMarcador.getX()+dx;
 						
 						if( novaLargura<=intervalo )
 							return;
 						
 						deli.setLargura(novaLargura);
-						deli.setPontoX(novoX);
+					//	deli.setPontoX(novoX);
                         
 						switch(rotacao){
 							case 0:
-							case 360:figura.setLayoutX(pt.getX()+dx);
-							case 180:figura.setPrefWidth(novaLargura);
+							case 360:pane.setLayoutX(pt.getX()+dx);
+									 figura.setPrefWidth(novaLargura);
+								break;
+						/*	case 180:figura.setPrefWidth(novaLargura);
 									break;
-							case 270:figura.setLayoutX(pt.getX()+dx);
-							case 90:figura.setPrefHeight(novaLargura);
+							case 270:pane.setLayoutX(pt.getX()+dx);*/
+							case 90:pane.setLayoutX(pt.getX()+dx);
+									figura.setPrefHeight(novaLargura);
 						}
 						
 				//		ctr=true;
                         break;
-                case 3: //Baixo -> Descola a altura - trabalhando com a altura 
+         /*       case 3: //Baixo -> Descola a altura - trabalhando com a altura 
 						novaAltura = d2d.getHeight()+dy;
 						
 						if( novaAltura<=intervalo )
@@ -918,7 +923,7 @@ public class Compasso {
 									figura.setPrefHeight(novaLargura);
 							
 						}
-			//		    ctr=true;
+			//		    ctr=true;*/
             }
 			
 	}
