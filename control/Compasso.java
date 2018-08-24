@@ -220,6 +220,10 @@ public class Compasso {
             }
         });
     }
+	
+	public void last(){
+		return gc;
+	}
 
       
 	  

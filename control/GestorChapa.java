@@ -14,6 +14,7 @@ public class GestorChapa {
     private LinkedList<Chapa> gestorChapa;
     private HashMap<Chapa, Point2D> position;
     private HashMap<Chapa, Dimension2D> dimension;
+	private Chapa ultima;
 	
     public GestorChapa(){
         gestorChapa = new LinkedList<>();
@@ -86,6 +87,16 @@ public class GestorChapa {
     public LinkedList<Chapa> getAll(){
         return gestorChapa;
     }
+	
+	public void setLast(Chapa chapa){
+		ultima =chapa;
+	}
+	
+	public Chapa getChapa(){
+		return ultima;
+	}
+	
+	
     
     public void remove(Chapa pane){
         gestorChapa.remove(pane);

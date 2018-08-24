@@ -168,7 +168,7 @@ public class Tela extends Application{
 									getClass().getResource("estilo/regua.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
-		ct.sceneEvent(scene,ct);
+		ct.sceneEvent(scene,cp);
 
 		
     }
@@ -215,7 +215,7 @@ public class Tela extends Application{
 		
 		c2 = new ColumnConstraints(300, cp.getWidth() ,Double.MAX_VALUE);	
 		r2 = new RowConstraints(300,cp.getHeight(),Double.MAX_VALUE);
-		cp.scalaEvent(c2,r2,cp);
+		ct.scalaEvent(c2,r2,cp);
 	/*	escala.addListener( (obsv,olv,nv)->{
 			c2.setPrefWidth( cp.getWidth()*(double)nv  );
 			r2.setPrefHeight( cp.getWidth()*(double)nv   );
@@ -239,10 +239,11 @@ public class Tela extends Application{
 			executor.submit(task2);*/
 			
 		ct.setEscala(1d);
+		cp.getScala(ct.getEscala());
 		grid = new GridPane();
 		Scale scale = new Scale();
-		scale.xProperty().bind(ct.getEscala);
-		scale.yProperty().bind(ct.getEscala);
+		scale.xProperty().bind(ct.getEscala());
+		scale.yProperty().bind(ct.getEscala());
 		System.out.println( Double.MAX_VALUE);
 		grid.getTransforms().add(scale);
 		grid.setVgap(5);
@@ -381,7 +382,6 @@ public class Tela extends Application{
 
 		Spinner tfx = getSpinner();
 		Spinner tfy = getSpinner();
-		
 		Label labelW = getLabel("Largura");
 		Label labelH = getLabel("Altura");
 
@@ -606,7 +606,7 @@ public class Tela extends Application{
 		GridPane gridPane = new GridPane();
 		Text texto = new Text("Localizador");
 		Button texto1 = new Button("Fechar");
-		ct.eventButton(texto1,fundo);
+		ct.eventButton(texto1,fundo,paneBottom);
 		/*texto1.setOnAction(actionEvent->{
 			paneBottom.getChildren().remove(0);
 			int value = fundo.getChildren().size();
