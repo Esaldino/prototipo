@@ -476,7 +476,7 @@ public class Compasso {
 		Chapa chapa  = new Chapa();
 		Rotate r = new Rotate(0,0,0);
 		
-		final int tam =7;
+		final int tam =8;
 		figura.getTransforms().addAll(r);
 		Delimitador deli  = new Delimitador( figura.getPrefWidth() , figura.getPrefHeight() );
 		deli.pontosTrans(tam);
@@ -574,10 +574,9 @@ public class Compasso {
 				case 6:	 //cima				   
 						novo=1;
 						break;
-				
-			/*	case 7:// BAIXO
+				case 7:// BAIXO
 						novo=3;
-						break;*/
+						break;
 				
 			}
 			System.out.println( " enquanto : " + i);

@@ -64,12 +64,12 @@ public class Delimitador extends Rectangle{
 		circle[6].setCursor( Cursor.V_RESIZE );
 		circle[6].centerXProperty().bind( xProperty().add( widthProperty().divide(2) ) );
 		circle[6].centerYProperty().bind( yProperty() );
-	/*	//bottom
+		//bottom
 		circle[7] = criaCircle();
 		circle[7].setRadius(4);
 		circle[7].setCursor( Cursor.V_RESIZE );
 		circle[7].centerXProperty().bind( xProperty().add( widthProperty().divide(2) ) );
-		circle[7].centerYProperty().bind( yProperty().add( heightProperty() ) );*/
+		circle[7].centerYProperty().bind( yProperty().add( heightProperty() ) );
 	}
 	public Circle criaCircle(){
 		Circle c = new Circle();
