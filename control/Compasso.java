@@ -655,7 +655,7 @@ public class Compasso {
 			double intervalo = 45;//limite de redimensionamento
 			double novoX=0;
             switch( getIterador() ){
-                case 1:// CIMA ->desloca a altura - trabalhando com a cordenada Y
+          /*      case 1:// CIMA ->desloca a altura - trabalhando com a cordenada Y
 						novaAltura = d2d.getHeight()-dy;
 					//	novoY      = pontosMarcador.getY()+dy;
 						
@@ -693,9 +693,9 @@ public class Compasso {
 							case 360:pane.setLayoutX(pt.getX()+dx);
 									 figura.setPrefWidth(novaLargura);
 								break;
-						/*	case 180:figura.setPrefWidth(novaLargura);
+							case 180:figura.setPrefWidth(novaLargura);
 									break;
-							case 270:pane.setLayoutX(pt.getX()+dx);*/
+							case 270:pane.setLayoutX(pt.getX()+dx);
 							case 90:pane.setLayoutX(pt.getX()+dx);
 									figura.setPrefHeight(novaLargura);
 						}
