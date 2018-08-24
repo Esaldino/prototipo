@@ -79,11 +79,7 @@ import java.util.Arrays;
 
 import java.util.concurrent.Executors;
 import javafx.scene.transform.Scale;
-import java.util.concurrent.ExecutorService;
 import java.util.ArrayList;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.util.StringConverter;
 import prototipo.control.Avaliador;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.scene.control.TextFormatter;
@@ -106,9 +102,10 @@ public class Tela extends Application{
 	ColumnConstraints c2;
 	RowConstraints r2;
 	private VBox vboxRegua;
+	private ControlTela ct;
 	private HBox hboxRegua;
 	private AnchorPane fundo;//REPRESENTA TODA A AREA DE DESENHO, onde de ENCONTRA A FOLHA
-	private DoubleProperty escala;
+	//private DoubleProperty escala;
     //caminho das imagens das ferramentas
     private String[] imagens = {
                         "icons8-button-50.png",
@@ -152,7 +149,7 @@ public class Tela extends Application{
 			ex.printStackTrace();
 			System.exit(1);
 		}
-		ControlTela ct = new ControlTela(cp);
+		ct = new ControlTela();
     }
 	
 	@Override
@@ -171,7 +168,7 @@ public class Tela extends Application{
 									getClass().getResource("estilo/regua.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
-		ct.sceneEvent(scene);
+		ct.sceneEvent(scene,ct);
 
 		
     }
@@ -218,15 +215,13 @@ public class Tela extends Application{
 		
 		c2 = new ColumnConstraints(300, cp.getWidth() ,Double.MAX_VALUE);	
 		r2 = new RowConstraints(300,cp.getHeight(),Double.MAX_VALUE);
-		
-		escala = new SimpleDoubleProperty();
-		cp.scalaEvent(escala,c2,r2);
+		cp.scalaEvent(c2,r2,cp);
 	/*	escala.addListener( (obsv,olv,nv)->{
 			c2.setPrefWidth( cp.getWidth()*(double)nv  );
 			r2.setPrefHeight( cp.getWidth()*(double)nv   );
 		});*/
 		
-		ct.tarefasRegua(hboxRegua,vboxRegua);
+		ct.tarefasRegua(hboxRegua,vboxRegua,cp);
 	/*	Task<ArrayList<BorderPane>> task1 = tarefa.reguaH(cp.getWidth());
 			task1.stateProperty().addListener((obs,old,nw)->{
 				if(nw==State.SUCCEEDED ){
@@ -243,11 +238,11 @@ public class Tela extends Application{
 			});
 			executor.submit(task2);*/
 			
-		escala.set(1d);
+		ct.setEscala(1d);
 		grid = new GridPane();
 		Scale scale = new Scale();
-		scale.xProperty().bind(escala);
-		scale.yProperty().bind(escala);
+		scale.xProperty().bind(ct.getEscala);
+		scale.yProperty().bind(ct.getEscala);
 		System.out.println( Double.MAX_VALUE);
 		grid.getTransforms().add(scale);
 		grid.setVgap(5);
@@ -306,9 +301,9 @@ public class Tela extends Application{
 		}
 		
 		ct.eventosTop(b);
-		b[5].setOnMouseClicked(actionEvent->escala.set(escala.get()+0.5));
+		/*b[5].setOnMouseClicked(actionEvent->escala.set(escala.get()+0.5));
 
-		b[6].setOnMouseClicked(actionEvent->escala.set(escala.get()-0.5));
+		b[6].setOnMouseClicked(actionEvent->escala.set(escala.get()-0.5));*/
 
 		vbox.getChildren().addAll(getMenuBar(),tl);
 		
@@ -422,12 +417,7 @@ public class Tela extends Application{
 		Label labelOpacityDisplay = getLabel("0");
 
 		slider.setBlockIncrement(0.01);
-
-		slider.valueProperty().addListener( (obs,ol,nw)->{
-			System.out.println();
-			int valor = (int)((double)nw * 100);
-			labelOpacityDisplay.setText(String.format("%d",valor)+"%");
-		});
+		ct.eventSlider(slider,labelOpacityDisplay);
 		
 		HBox hbox = new HBox(6);
 		hbox.getChildren().addAll(slider,labelOpacityDisplay);
@@ -461,12 +451,8 @@ public class Tela extends Application{
 		slider1.setPrefWidth(90);
 		
 		Label labelRadiDisplay = getLabel("0");
+		ct.eventSlider(slider1,labelRadiDisplay);
 
-
-		slider1.valueProperty().addListener( (obs,ol,nw)->{
-			int valor = (int)((double)nw * 100);
-			labelRadiDisplay.setText(String.format("%d",valor)+"%");
-		});
 		
 		HBox hbox1 = new HBox(6);
 		hbox1.getChildren().addAll(slider1,labelRadiDisplay);
@@ -522,8 +508,9 @@ public class Tela extends Application{
 		TitledPane tile3 = getTile(Util.codeUTF_8("Rotação"),gridToll5,false);
 		TitledPane tile4 = getTile("Fundo",gridToll3,false);
 		TitledPane tile5 = getTile("Bordas",gridToll4,false);
-
-		tile1.setOnMouseClicked( actionEvent->{
+	
+		ct.eventosTitled(tile1,tile2,tile3,tile4,tile5,tile6);
+		/*tile1.setOnMouseClicked( actionEvent->{
 			if( tile3.isExpanded() )
 				tile3.setExpanded(false);
 		});
@@ -554,7 +541,7 @@ public class Tela extends Application{
 
 			if( tile6.isExpanded() )
 				tile6.setExpanded(false);
-		});
+		});*/
 	    vbox.getChildren().addAll(labelProp,tile1,tile2,tile3,tile6,tile4,tile5);
 		
         return vbox;
@@ -619,13 +606,14 @@ public class Tela extends Application{
 		GridPane gridPane = new GridPane();
 		Text texto = new Text("Localizador");
 		Button texto1 = new Button("Fechar");
-		texto1.setOnAction(actionEvent->{
+		ct.eventButton(texto1,fundo);
+		/*texto1.setOnAction(actionEvent->{
 			paneBottom.getChildren().remove(0);
 			int value = fundo.getChildren().size();
 			System.out.println("Valendo : " + value );
 			if(value>1)
 				fundo.getChildren().remove(1, value);//remove os marcadores
-		});
+		});*/
 		Label labelX = new Label("x");
 		Label labelY = new Label("y");
 		Spinner tfX = new Spinner(0,cp.getWidth(),0);
@@ -635,7 +623,8 @@ public class Tela extends Application{
 		Button button = new Button("Buscar");
 		CheckBox ck1 = new CheckBox("Marcar");
 		CheckBox ck2 = new CheckBox("Posicionar");
-		button.setOnMouseClicked( actionEvent->{
+		ct.eventButton1(button,fundo,ck1,ck2,tfX,tfY);
+	/*	button.setOnMouseClicked( actionEvent->{
 			Double x = (double)tfX.getValue();
 			Double y = (double)tfY.getValue();
 			if( ck1.isSelected() ){
@@ -645,32 +634,9 @@ public class Tela extends Application{
 			}
 			
 			if( ck2.isSelected() ){
-				try{
-					
-					Double totalX = stagePrincipal.getScene().getX() + 
-								    ((Pane)root.getLeft()).getWidth() + 
-								    cp.getFolha().getLayoutX() +
-								    stagePrincipal.getX() +
-								    x.intValue();
-					Double totalY = stagePrincipal.getScene().getY() +
-									((MenuBar)root.getTop()).getHeight() +
-									cp.getFolha().getLayoutY() +
-									stagePrincipal.getY() +
-								    y.intValue();
-	
-					/*GraphicsDevice[] ge = getLocalGraphicsEnvironment().getScreenDevices();
-					System.out.println(ge[0].getDisplayMode().getWidth());
-					System.out.println(ge[0].getDisplayMode().getHeight());
-					System.out.println(ge[0].getType());*/
-					Robot r = new Robot();
-					r.mouseMove(totalX.intValue(),totalY.intValue());
-					
-					
-				}catch(Exception awtEx ){
-					awtEx.printStackTrace();
-				}
+
 			}
-		});
+		});*/
 		
 		
 		VBox vbox = new VBox();
