@@ -919,15 +919,17 @@ public class Compasso {
 							
 						}
                         break;
-              /*   case 8://SE -Desloca a largura e altura - trabalhando com a largura e altura
+                 case 8://SE -Desloca a largura e altura - trabalhando com a largura e altura
 						novaLargura = d2d.getWidth()+dx;
 						
 						
 						if(novaLargura>intervalo){
 							deli.setLargura(novaLargura);
+							 copiaX = ptFigura.getX()+dx;
 							dx = pt.getX()+dx;
 						}else{
 							novaLargura=deli.getWidth();
+							copiaX = figura.getLayoutX();
 							dx=figura.getLayoutX();
 						}
 							
@@ -935,26 +937,28 @@ public class Compasso {
 						
 						if(novaAltura>intervalo){
 							deli.setAltura(novaAltura);
+							copiaY = ptFigura.getY()+dy;
 							dy=pt.getY()+dy;
 						}else{
+							copiaY=figura.getLayoutY();
 							novaAltura=deli.getHeight();
 							dy=figura.getLayoutY();
 						}
 						
 						switch(rotacao){
-							case 180:figura.setLayoutX(dx);
-									 figura.setLayoutY(dy);
+							case 180:figura.setLayoutX(copiaX);
+									 figura.setLayoutY(copiaY);
 							case 0:
 							case 360:
 									figura.setPrefWidth(novaLargura);
 									figura.setPrefHeight(novaAltura);
 									break;
-							case 90:figura.setLayoutX(dx);
+							case 90:figura.setLayoutX(copiaX);
 									figura.setPrefWidth(novaAltura);
 									figura.setPrefHeight(novaLargura);
 									break;
 							case 270:
-									figura.setLayoutY(dy);
+									figura.setLayoutY(copiaY);
 									figura.setPrefWidth(novaAltura);
 									figura.setPrefHeight(novaLargura);
 							
