@@ -787,7 +787,7 @@ public class Compasso {
 							novaLargura = deli.getWidth();
 							dx=pane.getLayoutX();
 						}
-						System.out.println("Copia x : " + copiaX);
+						
 						switch(rotacao){
 							case 0:
 							case 360:pane.setLayoutX(dx);
@@ -873,42 +873,49 @@ public class Compasso {
 								
 						if(novaLargura>intervalo){
 							deli.setLargura(novaLargura);
-						    
+						    copiaX = ptFigura.getX()-dx;
 							dx = pt.getX()+dx;
 						}else{
 							novaLargura=deli.getWidth();
-							dx = figura.getLayoutX();
+							copiaX = figura.getLayoutX();
+							dx = pane.getLayoutX();
 						}
 								
 						novaAltura = d2d.getHeight()+dy;
 						
 						if( novaAltura>intervalo){
 							deli.setAltura(novaAltura);
+							copiaY = ptFigura.getY()+dy;
 							dy=pt.getY()+dy;
 						}else{
 							novaAltura=deli.getHeight();
-							dy=figura.getLayoutY();
+							copiaY=figura.getLayoutY();
+							dy=pane.getLayoutY();
 						}
-						
+						System.out.println("Copia x : " + copiaX);
 						switch( rotacao ){
 							
 							case 0:
-							case 360:figura.setLayoutX(dx);
+							case 360:pane.setLayoutX(dx);
 									 figura.setPrefWidth(novaLargura);
 									 figura.setPrefHeight(novaAltura);
 									 break;
-							/*case 90:figura.setPrefWidth(novaAltura);
+							case 90:pane.setLayoutX(dx);
+									figura.setLayoutX(copiaX);
+									figura.setPrefWidth(novaAltura);
 									figura.setPrefHeight(novaLargura);
 									break;
-							case 180:figura.setLayoutY(dy);
+							case 180:pane.setLayoutX(dx);
+									figura.setLayoutX(copiaX);
+									figura.setLayoutY(copiaY);
 									figura.setPrefWidth(novaLargura);
-									figura.setPrefHeight(novaAltura);
+							    	figura.setPrefHeight(novaAltura);
 									break;
-							case 270:
-									figura.setLayoutX(dx);
-									figura.setLayoutY(dy);
+							case 270:pane.setLayoutX(dx);
+									figura.setLayoutY(copiaY);
 									figura.setPrefWidth(novaAltura);
-									figura.setPrefHeight(novaLargura);*/
+									figura.setPrefHeight(novaLargura);
+
 							
 						}
                         break;
