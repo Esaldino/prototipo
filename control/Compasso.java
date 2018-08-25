@@ -563,8 +563,13 @@ public class Compasso {
 		
 
 		EventHandler<MouseEvent> eventoMov = (mouseEvent)->{
-            if( ctr )
+            if( ctr  )
                 return;
+			if(!deli.isAtivado()){
+				System.out.println("Estado delimitador : " + deli.isAtivado() );
+				return;
+			}
+			System.out.println("Nao parou " );
 			int i=0;
 			while( i<tam ){	
 				if(mouseEvent.getSource()==circle[i]){
@@ -599,7 +604,7 @@ public class Compasso {
 						break;
 				
 			}
-			System.out.println( " enquanto : " + i);
+			System.out.println( " enquanto : " + novo);
 			setIterador(novo);	
 		};
 		 
@@ -656,6 +661,8 @@ public class Compasso {
 			double novoY =0;
 			double intervalo = 45;//limite de redimensionamento
 			double novoX=0;
+			double copiaX;
+			double copiaY;
             switch( getIterador() ){
                 case 1:// CIMA ->desloca a altura - trabalhando com a cordenada Y
 						novaAltura = d2d.getHeight()-dy;
@@ -751,8 +758,7 @@ public class Compasso {
 						
                case 5: //NW - Desloca a a altura e largura - trbalhanco com eixo xy
 					    novaAltura = d2d.getHeight()-dy;
-						double copiaX;
-						double copiaY;
+						
 				//		novoY      = pontosMarcador.getY()+dy;
 						
 						if( novaAltura>intervalo ){
@@ -810,16 +816,15 @@ public class Compasso {
 						}							
 								
                         break;
-           /*       case 6: //NE - desloca a altura e largura-trabalhando com eio Y e largura
+                 case 6: //NE - desloca a altura e largura-trabalhando com eio Y e largura
 						novaAltura = d2d.getHeight()-dy;
-						novoY      = pontosMarcador.getY()+dy;
-						
 						if(novaAltura>intervalo){
 							deli.setAltura(novaAltura);
-							deli.setPontoY(novoY);
+							copiaY = ptFigura.getY()-dy;
 							dy=pt.getY()+dy;
 						}else{
-							dy=figura.getLayoutY();
+							copiaY=figura.getLayoutY();
+							dy=pane.getLayoutY();
 							novaAltura=deli.getHeight();
 						}
 							
@@ -828,33 +833,38 @@ public class Compasso {
 						
 						if(novaLargura>intervalo){
 							deli.setLargura(novaLargura);
+							copiaX = ptFigura.getX()+dx;
 							dx=pt.getX()+dx;
 						}else{
-							dx=figura.getLayoutX();
+							copiaX =figura.getLayoutX();
+							dx=pane.getLayoutX();
 							novaLargura=deli.getWidth();
 						}
 						
 						switch(rotacao){
-							
 							case 0:
-							case 360:figura.setLayoutY(dy);
+							case 360:pane.setLayoutY(dy);
 									 figura.setPrefWidth(novaLargura);
 									 figura.setPrefHeight(novaAltura);
 									 break;
-							case 90: figura.setLayoutX(dx);
-									 figura.setLayoutY(dy);
-							case 270:figura.setPrefWidth(novaAltura);
+							case 90: pane.setLayoutY(dy);
+									 figura.setLayoutX(copiaX);
+									 figura.setPrefWidth( novaAltura);
 									 figura.setPrefHeight(novaLargura);
-									break;
-							case 180:figura.setLayoutX(dx);
-									 figura.setPrefWidth(novaLargura);
-									 figura.setPrefHeight(novaAltura);
 									 break;
-		
+							case 270:pane.setLayoutY(dy);
+									 figura.setLayoutY(copiaY);
+									 figura.setPrefWidth(novaAltura);
+									 figura.setPrefHeight(novaLargura);
+									 break;
+							case 180:
+									pane.setLayoutY(dy);
+									figura.setLayoutX(copiaX);
+									figura.setPrefWidth(novaLargura);
+									figura.setPrefHeight(novaAltura);
+									figura.setLayoutY(copiaY);
+									break;
 						}
-						
-						
-						ctr=true;
                         break;
                  case 7://SW - Desloca altura e largura - trabalhando o eio X e altura
 						novaLargura = d2d.getWidth()-dx;
@@ -863,7 +873,7 @@ public class Compasso {
 								
 						if(novaLargura>intervalo){
 							deli.setLargura(novaLargura);
-							deli.setPontoX(novoX);
+						    
 							dx = pt.getX()+dx;
 						}else{
 							novaLargura=deli.getWidth();
@@ -887,7 +897,7 @@ public class Compasso {
 									 figura.setPrefWidth(novaLargura);
 									 figura.setPrefHeight(novaAltura);
 									 break;
-							case 90:figura.setPrefWidth(novaAltura);
+							/*case 90:figura.setPrefWidth(novaAltura);
 									figura.setPrefHeight(novaLargura);
 									break;
 							case 180:figura.setLayoutY(dy);
@@ -898,12 +908,11 @@ public class Compasso {
 									figura.setLayoutX(dx);
 									figura.setLayoutY(dy);
 									figura.setPrefWidth(novaAltura);
-									figura.setPrefHeight(novaLargura);
+									figura.setPrefHeight(novaLargura);*/
 							
 						}
-						ctr=true;
                         break;
-                case 8://SE -Desloca a largura e altura - trabalhando com a largura e altura
+              /*   case 8://SE -Desloca a largura e altura - trabalhando com a largura e altura
 						novaLargura = d2d.getWidth()+dx;
 						
 						
