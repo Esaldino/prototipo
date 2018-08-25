@@ -11,7 +11,7 @@ public class Chapa extends AnchorPane{
 	public Chapa(){
 		
 		setStyle("-fx-background-color:blue");
-		setPrefSize(300,300);
+		setPrefSize(150,100);
 	}
 	public Delimitador get(){
 		return (Delimitador) getChildren().get(1);

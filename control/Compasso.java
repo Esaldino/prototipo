@@ -68,7 +68,7 @@ public class Compasso {
      */
     private final Point2D[] cordenadas,cordenadaMarcador;
 	
-    private Point2D pontosMarcador, pontos,pt;
+    private Point2D pontosMarcador, pontos,pt,ptFigura;
   
     /*As 3 variaveis a seguir contram o movimento dos objetos e o seu redimensiomannto*/
     private boolean keyCtr;//mapeia se a tecla ctr foi clicado
@@ -609,6 +609,8 @@ public class Compasso {
 			double x = mouseEvent.getScreenX()/escala.get();
 			double y = mouseEvent.getScreenY()/escala.get();
 			pontos = new Point2D(x,y);
+			ptFigura = new Point2D(figura.getLayoutX(),figura.getLayoutY());
+			out.println(ptFigura);
 			pontosMarcador = new Point2D(deli.getX(),deli.getY());//guarda a pos do delimitador
 		//	pt = new Point2D(figura.getLayoutX(),figura.getLayoutY());
 			pt = new Point2D(chapa.getLayoutX(),chapa.getLayoutY());
@@ -655,30 +657,36 @@ public class Compasso {
 			double intervalo = 45;//limite de redimensionamento
 			double novoX=0;
             switch( getIterador() ){
-          /*      case 1:// CIMA ->desloca a altura - trabalhando com a cordenada Y
+                case 1:// CIMA ->desloca a altura - trabalhando com a cordenada Y
 						novaAltura = d2d.getHeight()-dy;
 					//	novoY      = pontosMarcador.getY()+dy;
-						
 						if( novaAltura<=intervalo )
 							return;
-						
 						deli.setAltura(novaAltura);
 					//	deli.setPontoY(novoY);
-						
+						out.println("valor dy : " + dy);
 						
 						switch(rotacao){
 							case 0:
 							case 360:pane.setLayoutY(pt.getY()+dy);
-						//	case 360:figura.setLayoutY(pt.getY()+dy);
-							case 180:figura.setPrefHeight(novaAltura);
+									figura.setPrefHeight(novaAltura);
+									break;
+							case 180:pane.setLayoutY(pt.getY()+dy);
+									 figura.setLayoutY(ptFigura.getY()-dy);
+									 figura.setPrefHeight(novaAltura);
 									 break;
+							
 							case 90:pane.setLayoutY(pt.getY()+dy);
-							case 270:figura.setPrefWidth(novaAltura);
+									figura.setPrefWidth(novaAltura);
+									break;
+							case 270:pane.setLayoutY(pt.getY()+dy);
+									figura.setLayoutY(ptFigura.getY()-dy);
+									figura.setPrefWidth(novaAltura);
 						}
 						
 				//		ctr=true;
 						break;
-                case 2: //Esquerdo - desloca a largura -trabalhando com o eixo X
+       /*         case 2: //Esquerdo - desloca a largura -trabalhando com o eixo X
 						novaLargura = d2d.getWidth()-dx;
 					//	novoX = pontosMarcador.getX()+dx;
 						

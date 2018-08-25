@@ -4,6 +4,8 @@ import javafx.scene.control.Spinner;
 import prototipo.model.Chapa;
 import prototipo.model.Delimitador;
 import javafx.scene.control.Control;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 
 public class ControlGeometria{
 	private Spinner dx;
@@ -32,43 +34,59 @@ public class ControlGeometria{
 		dh.getValueFactory().setValue( deli.getHeight());
 		dw.getValueFactory().setValue( deli.getWidth());
 		
-		dx.setOnMouseClicked( mouseEvent->{
+		dx.setOnMousePressed( mouseEvent->{
+			if( mouseEvent.getButton()!=MouseButton.PRIMARY)
+				return;
 			chapa.setLayoutX((double)dx.getValue()+deli.getX());
 			gc.actulizarFigura();
 		});
 		
-		dx.getEditor().setOnKeyReleased( mouseEvent->{
+		dx.getEditor().setOnKeyPressed( keyEvent->{
+			if( keyEvent.getCode() != KeyCode.ENTER )
+				return;
 			chapa.setLayoutX((double)dx.getValue()+deli.getX());
 			gc.actulizarFigura();
 		});
 		
-		dy.setOnMouseClicked( mouseEvent->{
+		dy.setOnMousePressed( mouseEvent->{
+			if( mouseEvent.getButton()!=MouseButton.PRIMARY)
+				return;
 			chapa.setLayoutY((double)dy.getValue()+deli.getY());
 			gc.actulizarFigura();
 		});
 		
-		dy.getEditor().setOnKeyReleased( mouseEvent->{
+		dy.getEditor().setOnKeyPressed( keyEvent->{
+			if( keyEvent.getCode() != KeyCode.ENTER )
+				return;
 			chapa.setLayoutY((double)dy.getValue()+deli.getY());
 			gc.actulizarFigura();
 		});
 		
 		
-		dw.setOnMouseClicked( mouseEvent->{
+		dw.setOnMousePressed( mouseEvent->{
+			if( mouseEvent.getButton()!=MouseButton.PRIMARY)
+				return;
 			deli.setHeight((double)dx.getValue());
 			gc.actulizarFigura();
 		});
 		
-		dw.getEditor().setOnKeyReleased( mouseEvent->{
+		dw.getEditor().setOnKeyPressed( keyEvent->{
+			if( keyEvent.getCode() != KeyCode.ENTER )
+				return;
 			deli.setHeight((double)dx.getValue());
 			gc.actulizarFigura();
 		});
 		
-		dh.setOnMouseClicked( mouseEvent->{
+		dh.setOnMousePressed( mouseEvent->{
+			if( mouseEvent.getButton()!=MouseButton.PRIMARY)
+				return;
 			deli.setWidth((double)dx.getValue());
 			gc.actulizarFigura();
 		});
 		
-		dh.getEditor().setOnKeyReleased( mouseEvent->{
+		dh.getEditor().setOnKeyPressed( keyEvent->{
+			if( keyEvent.getCode() != KeyCode.ENTER )
+				return;
 			deli.setWidth((double)dx.getValue());
 			gc.actulizarFigura();
 		});
