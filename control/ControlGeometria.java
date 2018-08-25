@@ -6,6 +6,7 @@ import prototipo.model.Delimitador;
 import javafx.scene.control.Control;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import java.util.function.DoubleConsumer;
 
 public class ControlGeometria{
 	private Spinner dx;
@@ -20,7 +21,6 @@ public class ControlGeometria{
 		dy = d[1];
 		dw = d[2];
 		dh = d[3];
-			//System.out.println(dx);
 	}	
 	
 	public void link( Chapa chapa , GestorChapa gc){
@@ -33,6 +33,38 @@ public class ControlGeometria{
 		dy.getValueFactory().setValue( chapa.getLayoutX()+deli.getY());
 		dh.getValueFactory().setValue( deli.getHeight());
 		dw.getValueFactory().setValue( deli.getWidth());
+
+		DoubleConsumer dcw = (value)->{
+			switch(chapa.getRotacao()){
+				case 180:figura.setLayoutX(value);
+				case 0:
+				case 360:deli.setWidth(value);
+					    figura.setPrefWidth(value);
+					    break;
+				case 90:deli.setWidth(value);
+						figura.setLayoutX(value);
+						figura.setPrefHeight(value);
+						break;
+				case 270:deli.setWidth(value);
+						figura.setPrefHeight(value);
+			}	
+		};
+
+		DoubleConsumer dch = (value)->{
+			switch(chapa.getRotacao()){
+				case 180:figura.setLayoutY(value);
+				case 0:
+				case 360:deli.setHeight(value);
+					    figura.setPrefHeight(value);
+					    break;
+				case 90:deli.setHeight(value);
+						figura.setPrefWidth(value);
+						break;
+				case 270:figura.setLayoutY(value);
+						deli.setHeight(value);
+						figura.setPrefWidth(value);
+			}	
+		};
 		
 		dx.setOnMousePressed( mouseEvent->{
 			if( mouseEvent.getButton()!=MouseButton.PRIMARY)
@@ -66,28 +98,28 @@ public class ControlGeometria{
 		dw.setOnMousePressed( mouseEvent->{
 			if( mouseEvent.getButton()!=MouseButton.PRIMARY)
 				return;
-			deli.setHeight((double)dx.getValue());
+			dcw.accept((double)dw.getValue());
 			gc.actulizarFigura();
 		});
 		
 		dw.getEditor().setOnKeyPressed( keyEvent->{
 			if( keyEvent.getCode() != KeyCode.ENTER )
 				return;
-			deli.setHeight((double)dx.getValue());
+			dcw.accept((double)dw.getValue());
 			gc.actulizarFigura();
 		});
 		
 		dh.setOnMousePressed( mouseEvent->{
 			if( mouseEvent.getButton()!=MouseButton.PRIMARY)
 				return;
-			deli.setWidth((double)dx.getValue());
+			dch.accept((double)dh.getValue());
 			gc.actulizarFigura();
 		});
 		
 		dh.getEditor().setOnKeyPressed( keyEvent->{
 			if( keyEvent.getCode() != KeyCode.ENTER )
 				return;
-			deli.setWidth((double)dx.getValue());
+			dch.accept((double)dh.getValue());
 			gc.actulizarFigura();
 		});
 	

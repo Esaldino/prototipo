@@ -85,6 +85,7 @@ import javafx.util.converter.DoubleStringConverter;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory;
 import prototipo.control.ControlTela;
+import javafx.scene.text.Font;
 /**
  *
  * @author Esaldino
@@ -389,7 +390,10 @@ public class Tela extends Application{
 		Spinner tfW = getSpinner();
 		Spinner tfH = getSpinner();
 		
-		
+		cp.setSpinner(tfx.getValueFactory(),
+					tfy.getValueFactory(),
+					tfW.getValueFactory(),
+					tfH.getValueFactory());
 		av.setControlGeometria(tfx,tfy,tfW,tfH);
 		GridPane gridToll = getGrid(false);
 	
@@ -469,19 +473,13 @@ public class Tela extends Application{
 		gridToll4.add(labelEstilo,0,1);gridToll4.add(comboBox,1,1);
 		gridToll4.add(labelRaddi,0,2);gridToll4.add(hbox1,1,2);
 		gridToll4.add(labelLArgura,0,3);gridToll4.add(spinner1,1,3);
-		//Rotacao
-		Label labelAngle = getLabel(Util.codeUTF_8("Ângulo"));
-
-		Spinner sp = new Spinner(-360,360,0,90);
-		sp.getStyleClass().add("toll");
-		
-		GridPane gridToll5 =getGrid(true);
-		gridToll5.add(labelAngle,0,0);gridToll5.add(sp,1,0);
+	
 		//font
 
 		Label labelFont = getLabel( "Familia ");
-		ObservableList<String> obsf = observableArrayList("Arial","Carier");
+		ObservableList<String> obsf = observableArrayList(Font.getFamilies());
 		ComboBox cbfont = new ComboBox(obsf);
+		cbfont.getSelectionModel().select(0);
 
 		Label labelSize = getLabel( "Tamanho ");
 		Spinner spSize = new Spinner(1,100,12);
@@ -505,44 +503,11 @@ public class Tela extends Application{
 		TitledPane tile1 = getTile("Descricao",gridToll2,true);
 		TitledPane tile6 = getTile("Fonte",gridFont,true);
 		TitledPane tile2 = getTile("Geomtria",gridToll,true);
-		TitledPane tile3 = getTile(Util.codeUTF_8("Rotação"),gridToll5,false);
 		TitledPane tile4 = getTile("Fundo",gridToll3,false);
 		TitledPane tile5 = getTile("Bordas",gridToll4,false);
 	
-		ct.eventosTitled(tile1,tile2,tile3,tile4,tile5,tile6);
-		/*tile1.setOnMouseClicked( actionEvent->{
-			if( tile3.isExpanded() )
-				tile3.setExpanded(false);
-		});
-		
-		tile3.setOnMouseClicked( actionEvent->{
-			if( tile1.isExpanded() )
-				tile1.setExpanded(false);
-		});
-
-		tile6.setOnMouseClicked( actionEvent->{
-			if( tile4.isExpanded() )
-				tile4.setExpanded(false);
-			if( tile5.isExpanded() )
-				tile5.setExpanded(false);
-		});
-		
-		tile4.setOnMouseClicked( actionEvent->{
-			if( tile5.isExpanded() )
-				tile5.setExpanded(false);
-			if( tile1.isExpanded() )
-				tile1.setExpanded(false);
-			
-		});
-		
-		tile5.setOnMouseClicked( actionEvent->{
-			if( tile4.isExpanded() )
-				tile4.setExpanded(false);
-
-			if( tile6.isExpanded() )
-				tile6.setExpanded(false);
-		});*/
-	    vbox.getChildren().addAll(labelProp,tile1,tile2,tile3,tile6,tile4,tile5);
+		ct.eventosTitled(tile1,tile2,tile4,tile5,tile6);
+	    vbox.getChildren().addAll(labelProp,tile1,tile2,tile6,tile4,tile5);
 		
         return vbox;
     }
@@ -750,8 +715,8 @@ public class Tela extends Application{
     }
     
      public ComboBox criarFiguraCombo() {
-        ObservableList<String> lista = FXCollections.observableArrayList("lista");
-        ComboBox combo = new ComboBox(lista);
+        ComboBox<String> combo = new ComboBox<>();
+        combo.setValue("comboBox");
 		combo.setPrefSize(90,40);
         combo.setId("node");
         combo.setEditable(false);

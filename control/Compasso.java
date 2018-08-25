@@ -47,6 +47,7 @@ import javafx.scene.Group;
 
 import javafx.scene.transform.Scale;
 import javafx.scene.shape.Circle;
+import javafx.scene.control.SpinnerValueFactory;
 //Controladores de propriedades
 
 
@@ -92,6 +93,8 @@ public class Compasso {
 	private double dx;
 	private double dy;
 
+	private SpinnerValueFactory<Double> sx,sy,sw,sh;
+
 	//variaveis que controlam as propriedade
 	private Avaliador av;
     
@@ -112,6 +115,12 @@ public class Compasso {
         ctr = false;
     }
 
+    public void setSpinner(SpinnerValueFactory ...spinner){
+    	sx = spinner[0];
+    	sy = spinner[1];
+    	sw = spinner[2];
+    	sh = spinner[3];
+    }
 	//Fazendo link com as propriedades
     public void setAvalidor(Avaliador avalidor ){
     	av = avalidor;
@@ -474,7 +483,9 @@ public class Compasso {
 
 			chapa.setLayoutX(px);
 			chapa.setLayoutY(py);
+
 		}
+		
 	}
 	
 	public void process( Chapa chapa){
@@ -540,6 +551,8 @@ public class Compasso {
 				dx = x - pontos.getX(); 
 				dy = y - pontos.getY();
 				moverFigura(dx,dy);
+				sx.setValue(chapa.getLayoutX());
+       			sy.setValue(chapa.getLayoutY());
 			} 
         });//onMouseDragged
         
@@ -624,7 +637,7 @@ public class Compasso {
 		
 		
 		EventHandler<MouseEvent> eventoDrag =(mouseEvent)->{ 
-			if( mouseEvent.getButton() == MouseButton.PRIMARY ){
+			if( mouseEvent.getButton() == MouseButton.PRIMARY && deli.isAtivado() ){
 				double x = mouseEvent.getScreenX()/escala.get();
 				double y = mouseEvent.getScreenY()/escala.get(); 
 				dx = x - pontos.getX(); 
@@ -965,6 +978,10 @@ public class Compasso {
 						}
 			//		    ctr=true;*/
             }
+            sx.setValue(pane.getLayoutX());
+            sy.setValue(pane.getLayoutY());
+            sw.setValue(deli.getWidth());
+            sh.setValue(deli.getHeight());
 			
 	}
     
