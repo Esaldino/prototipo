@@ -684,9 +684,8 @@ public class Compasso {
 									figura.setPrefWidth(novaAltura);
 						}
 						
-				//		ctr=true;
 						break;
-       /*         case 2: //Esquerdo - desloca a largura -trabalhando com o eixo X
+                case 2: //Esquerdo - desloca a largura -trabalhando com o eixo X
 						novaLargura = d2d.getWidth()-dx;
 					//	novoX = pontosMarcador.getX()+dx;
 						
@@ -701,70 +700,71 @@ public class Compasso {
 							case 360:pane.setLayoutX(pt.getX()+dx);
 									 figura.setPrefWidth(novaLargura);
 								break;
-							case 180:figura.setPrefWidth(novaLargura);
+							case 180:pane.setLayoutX(pt.getX()+dx);
+									figura.setLayoutX(ptFigura.getX()-dx);
+									figura.setPrefWidth(novaLargura);
 									break;
-							case 270:pane.setLayoutX(pt.getX()+dx);
-							case 90:pane.setLayoutX(pt.getX()+dx);
+							case 270://figura.setLayoutX(ptFigura.getX()-dx);
+									pane.setLayoutX(pt.getX()+dx);
+									figura.setPrefHeight(novaLargura);
+									break;
+							case 90:figura.setLayoutX(ptFigura.getX()-dx);
+									pane.setLayoutX(pt.getX()+dx);
 									figura.setPrefHeight(novaLargura);
 						}
 						
 				//		ctr=true;
                         break;
-         /*       case 3: //Baixo -> Descola a altura - trabalhando com a altura 
+                case 3: //Baixo -> Descola a altura - trabalhando com a altura 
 						novaAltura = d2d.getHeight()+dy;
-						
 						if( novaAltura<=intervalo )
 							return;
-						
 						deli.setAltura(novaAltura);
 						
 						switch(rotacao){
-							case 180:figura.setLayoutY(pt.getY()+dy);
+							case 180:figura.setLayoutY(ptFigura.getY()+dy);
 							case 0:
 							case 360:figura.setPrefHeight(novaAltura);
 									 break;
-							case 270:figura.setLayoutY(pt.getY()+dy);
+							case 270:figura.setLayoutY(ptFigura.getY()+dy);
 							case 90: figura.setPrefWidth(novaAltura);
 									break;
-							
-							
 						}
-						
-						
-				//		ctr=true;
                         break;
 						
-                case 4: //direito - > Desloca a largura - trabalhando a largura
+               case 4: //direito - > Desloca a largura - trabalhando a largura
 						novaLargura = d2d.getWidth()+dx;
-						
 						if( novaLargura<=intervalo )
 							return;
-						
 						deli.setLargura(novaLargura);
-						
 						switch(rotacao){
-							case 180:figura.setLayoutX(pt.getX()+dx);
+							case 180:figura.setLayoutX(ptFigura.getX()+dx);
 							case 0:
 							case 360:figura.setPrefWidth(novaLargura);
 								 break;
-							case 90:figura.setLayoutX(pt.getX()+dx);
+							case 90:figura.setLayoutX(ptFigura.getX()+dx);
+									figura.setPrefHeight(novaLargura);
 							case 270:figura.setPrefHeight(novaLargura);
-									break;	
+									break;
 						}
-						ctr=true;
                         break;
 						
-                case 5: //NW - Desloca a a altura e largura - trbalhanco com eixo xy
+               case 5: //NW - Desloca a a altura e largura - trbalhanco com eixo xy
 					    novaAltura = d2d.getHeight()-dy;
-						novoY      = pontosMarcador.getY()+dy;
+						double copiaX;
+						double copiaY;
+				//		novoY      = pontosMarcador.getY()+dy;
 						
 						if( novaAltura>intervalo ){
 							deli.setAltura(novaAltura);
-							deli.setPontoY(novoY);
+							copiaY = ptFigura.getY()-dy;
+				//			deli.setPontoY(novoY);
 							dy=pt.getY()+dy;
 						}else{
 							novaAltura = deli.getHeight();
-							dy=figura.getLayoutY();
+							
+							copiaY = figura.getLayoutY();
+							dy=pane.getLayoutY();
 						}
 						
 						novaLargura = d2d.getWidth()-dx;
@@ -772,33 +772,45 @@ public class Compasso {
 						
 						if(novaLargura>intervalo){
 							deli.setLargura(novaLargura);
-							deli.setPontoX(novoX);
+				//			deli.setPontoX(novoX);
+							copiaX = ptFigura.getX()-dx;
 							dx=pt.getX()+dx;
+							
 						}else{
+							copiaX = figura.getLayoutX();
 							novaLargura = deli.getWidth();
-							dx=figura.getLayoutX();
+							dx=pane.getLayoutX();
 						}
-	
+						System.out.println("Copia x : " + copiaX);
 						switch(rotacao){
 							case 0:
-							case 360:figura.setLayoutX(dx);
-								     figura.setLayoutY(dy);
-							case 180:figura.setPrefWidth(novaLargura);
+							case 360:pane.setLayoutX(dx);
+								     pane.setLayoutY(dy);
+									 figura.setPrefWidth(novaLargura);
 									 figura.setPrefHeight(novaAltura);
 									 break;
-							case 90: 
-								     figura.setLayoutY(dy);
-									 figura.setPrefWidth( novaAltura );
-									 figura.setPrefHeight( novaLargura );
+							case 180:pane.setLayoutY(dy);
+									 pane.setLayoutX(dx);
+									 figura.setLayoutX(copiaX);
+									 figura.setLayoutY(copiaY);
+									 figura.setPrefWidth(novaLargura);
+									 figura.setPrefHeight(novaAltura);
 									 break;
-							case 270:figura.setLayoutX(dx);
+							case 90: pane.setLayoutY(dy);
+									 pane.setLayoutX(dx);
+									 figura.setLayoutX(copiaX);
+									 figura.setPrefHeight(novaLargura);
+									 figura.setPrefWidth(novaAltura);
+									 break;
+							case 270:pane.setLayoutY(dy);
+									 pane.setLayoutX(dx);
+									 figura.setLayoutY(copiaY);
 									 figura.setPrefWidth( novaAltura );
 									 figura.setPrefHeight( novaLargura );
 						}							
 								
-				//		ctr=true;
                         break;
-                case 6: //NE - desloca a altura e largura-trabalhando com eio Y e largura
+           /*       case 6: //NE - desloca a altura e largura-trabalhando com eio Y e largura
 						novaAltura = d2d.getHeight()-dy;
 						novoY      = pontosMarcador.getY()+dy;
 						
