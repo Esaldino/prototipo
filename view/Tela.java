@@ -307,11 +307,18 @@ public class Tela extends Application{
         VBox vbox = new VBox();
         ferramentas = new Label[imagens.length];
         EventosFerramenta eventos = new EventosFerramenta();
-        for(int i=0; i<imagens.length;i++){
-            ferramentas[i] = getImagem(imagens[i],Util.codeUTF_8(descricao[i]));
-            ferramentas[i].setOnMouseClicked(eventos);
-            vbox.getChildren().add(ferramentas[i]);
-        }
+        try{
+			String[] descFile  = Util.getDescricao(getClass().getResource("nota/icons3.txt").toURI());
+			String[] file    = Util.getFile(getClass().getResource("icones3/").toURI());
+			for(int i = 0;i<file.length;i++){
+				ferramentas[i] = getImage(file[i],descFile[i]);
+				ferramentas[i].setOnMouseClicked(eventos);
+            	vbox.getChildren().add(ferramentas[i]);
+			}
+		}catch(Exception ex ){
+			ex.printStackTrace();
+			System.exit(1);
+		}
         //Rec
         return vbox;
     }
@@ -319,33 +326,22 @@ public class Tela extends Application{
     public Label getImage( String file,String descricao){
         Image image = new Image(file);
         ImageView mv = new ImageView(image);
+        mv.setFitHeight(30);
+        mv.setFitWidth(30);
         Label label = new Label("",mv);
-        label.setPrefSize(50,50);
+       	label.setPrefSize(40,30);
         Tooltip tool = new Tooltip(descricao);
         label.setTooltip(tool);
         label.setId("label-id");
         return label;
     }
     
-    public Label getImagem( String url,String descricao){
-		url= "image/"+url;
-        Image image = new Image(getClass().getResourceAsStream(url));
-        ImageView mv = new ImageView(image);
-        mv.setFitHeight(30);
-        mv.setFitWidth(30);
-        Label label = new Label("",mv);
-        label.setPrefSize(30,30);
-        Tooltip tool = new Tooltip(descricao);
-        label.setTooltip(tool);
-        label.setId("label-id");
-        return label;
-    }
     
     
     public  Pane getPropriedade(){
         VBox vbox = new VBox();
         vbox.getStyleClass().add("barra-prop");
-		vbox.setPrefWidth(200);
+		vbox.setPrefWidth(140);
 
 		Label labelProp = new Label("Propriedade");
 		
