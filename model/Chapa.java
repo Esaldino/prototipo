@@ -9,11 +9,10 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.Node;
 public class Chapa extends AnchorPane{
 
-	public Chapa(){
+	/*public Chapa(){
 		
-		setStyle("-fx-background-color:blue");
-		setPrefSize(150,100);
-	}
+	//	setStyle("-fx-background-color:blue");
+	}*/
 	public Delimitador get(){
 		return (Delimitador) getChildren().get(1);
 	}

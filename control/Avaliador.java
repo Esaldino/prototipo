@@ -12,14 +12,20 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Spinner;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.control.Labeled;
+import javafx.scene.control.ComboBox;
 import prototipo.model.Chapa;
 import javafx.scene.Node;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.FontPosture;
 
 public class  Avaliador{
 	private TextField tf;
 	private ControlTexto controlTexto;
 	private ControlGeometria controlG;
+	private ControlFonte controlFonte;
 
 	public Avaliador( TextField textField){
 		tf = textField;
@@ -35,27 +41,35 @@ public class  Avaliador{
 		controlG = new ControlGeometria(dp);
 		System.out.println("ativou");
 	}
+
+	public void setControlFonte(ObjectProperty<Double> obs,ObjectProperty<String> obf,
+							ObjectProperty<FontWeight> obw,ObjectProperty<FontPosture> obp){
+		controlFonte = new ControlFonte(obs,obf,obw,obp);
+		System.out.println("ativou Fonte");
+	}
+
 	
 	public void testar(Chapa chapa,GestorChapa gc){
 		//ativa as proriedades geometria
 		controlG.link(chapa,gc);
+
 		//Ativas as outroas propriedades
 		Node figura = chapa.getControl();
 		if( figura instanceof TextField  ){
 			tf.setText("Text-field");
-			controlTexto.limpar();
 			controlTexto.link( ((TextField)figura).promptTextProperty() );
+			controlFonte.link(chapa,1);
 		}else if( figura instanceof Button ){
-			controlTexto.limpar();
 			tf.setText("Button");
 			controlTexto.link( ((Button)figura).textProperty() );
+			controlFonte.link(chapa,3);
 		}else if( figura instanceof Label ){
-			controlTexto.limpar();
 			tf.setText("Label");
 			controlTexto.link( ((Label)figura).textProperty() );
+			controlFonte.link(chapa,3);
 		}else if( figura instanceof ComboBox ){
 			tf.setText("Combo-box");
+			controlFonte.link(chapa,2);
 		}
-		
 	}
 }

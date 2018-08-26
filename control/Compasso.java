@@ -142,7 +142,6 @@ public class Compasso {
 	
 	public void setIterador(int value){
         this.iterador = value;
-		System.out.println("Iterador : " + value ); 
     }
     
     public int getIterador(){
@@ -195,9 +194,6 @@ public class Compasso {
                 deliProcessados.clear();
             if(panesMarcados.size()>0)
                 panesMarcados.clear();
-     
-			
-		//	gc.actulizarFigura();
         });
         
         folha.setOnMouseDragged( mouseEvent->{
@@ -315,6 +311,10 @@ public class Compasso {
     public void setKeyCtr(boolean estado){
         this.keyCtr = estado;
         //out.println( "Pressionado" ); 
+    }
+
+    public GestorChapa getGc(){
+    	return gc;
     }
     
     /*Menu contexto para as figuras*/
@@ -485,7 +485,6 @@ public class Compasso {
 			chapa.setLayoutY(py);
 
 		}
-		
 	}
 	
 	public void process( Chapa chapa){
@@ -591,16 +590,16 @@ public class Compasso {
 					i++;
 			}
 			switch(i){
-				case 0: //	out.println("Chegou no pontos P0");
+				case 0: 
 						novo = 5;
 						break;
-				case 1:	// out.println("Chegou no pontos P1");
+				case 1:
 						novo=6;
 						break;
-				case 2: //    out.println("Chegou no pontos P2");
+				case 2:
 						novo=7;
 						break;
-				case 3: //out.println("Chegou no pontos P3");
+				case 3: 
 						novo=8;
 						break;
 				case 4://esquerdo
@@ -630,7 +629,6 @@ public class Compasso {
 			ptFigura = new Point2D(figura.getLayoutX(),figura.getLayoutY());
 			out.println(ptFigura);
 			pontosMarcador = new Point2D(deli.getX(),deli.getY());//guarda a pos do delimitador
-		//	pt = new Point2D(figura.getLayoutX(),figura.getLayoutY());
 			pt = new Point2D(chapa.getLayoutX(),chapa.getLayoutY());
 		};
 		
@@ -683,9 +681,6 @@ public class Compasso {
 						if( novaAltura<=intervalo )
 							return;
 						deli.setAltura(novaAltura);
-					//	deli.setPontoY(novoY);
-						out.println("valor dy : " + dy);
-						
 						switch(rotacao){
 							case 0:
 							case 360:pane.setLayoutY(pt.getY()+dy);
@@ -707,14 +702,10 @@ public class Compasso {
 						break;
                 case 2: //Esquerdo - desloca a largura -trabalhando com o eixo X
 						novaLargura = d2d.getWidth()-dx;
-					//	novoX = pontosMarcador.getX()+dx;
-						
 						if( novaLargura<=intervalo )
 							return;
 						
 						deli.setLargura(novaLargura);
-					//	deli.setPontoX(novoX);
-                        
 						switch(rotacao){
 							case 0:
 							case 360:pane.setLayoutX(pt.getX()+dx);
@@ -732,8 +723,6 @@ public class Compasso {
 									pane.setLayoutX(pt.getX()+dx);
 									figura.setPrefHeight(novaLargura);
 						}
-						
-				//		ctr=true;
                         break;
                 case 3: //Baixo -> Descola a altura - trabalhando com a altura 
 						novaAltura = d2d.getHeight()+dy;
@@ -771,13 +760,9 @@ public class Compasso {
 						
                case 5: //NW - Desloca a a altura e largura - trbalhanco com eixo xy
 					    novaAltura = d2d.getHeight()-dy;
-						
-				//		novoY      = pontosMarcador.getY()+dy;
-						
 						if( novaAltura>intervalo ){
 							deli.setAltura(novaAltura);
 							copiaY = ptFigura.getY()-dy;
-				//			deli.setPontoY(novoY);
 							dy=pt.getY()+dy;
 						}else{
 							novaAltura = deli.getHeight();
@@ -791,7 +776,6 @@ public class Compasso {
 						
 						if(novaLargura>intervalo){
 							deli.setLargura(novaLargura);
-				//			deli.setPontoX(novoX);
 							copiaX = ptFigura.getX()-dx;
 							dx=pt.getX()+dx;
 							
@@ -905,7 +889,6 @@ public class Compasso {
 							copiaY=figura.getLayoutY();
 							dy=pane.getLayoutY();
 						}
-						System.out.println("Copia x : " + copiaX);
 						switch( rotacao ){
 							
 							case 0:
@@ -976,7 +959,6 @@ public class Compasso {
 									figura.setPrefHeight(novaLargura);
 							
 						}
-			//		    ctr=true;*/
             }
             sx.setValue(pane.getLayoutX());
             sy.setValue(pane.getLayoutY());
@@ -984,7 +966,6 @@ public class Compasso {
             sh.setValue(deli.getHeight());
 			
 	}
-    
 	public void visualizar( Chapa chapa){
 		Delimitador deli = chapa.get();
 		Dimension2D dm = gc.getDimension(chapa);
@@ -995,8 +976,4 @@ public class Compasso {
 		out.println("x  : " + deli.getLayoutBounds() );
 		
 	}
-	
-
-	
-
 }

@@ -84,8 +84,11 @@ import prototipo.control.Avaliador;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory;
+import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import prototipo.control.ControlTela;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.FontPosture;
 /**
  *
  * @author Esaldino
@@ -97,8 +100,6 @@ public class Tela extends Application{
 	private VBox paneBottom;
 	private Stage stagePrincipal;
 	private BorderPane root;
-//	private ExecutorService executor;
-	//private Tarefa tarefa;
 	GridPane grid;
 	ColumnConstraints c2;
 	RowConstraints r2;
@@ -106,7 +107,6 @@ public class Tela extends Application{
 	private ControlTela ct;
 	private HBox hboxRegua;
 	private AnchorPane fundo;//REPRESENTA TODA A AREA DE DESENHO, onde de ENCONTRA A FOLHA
-	//private DoubleProperty escala;
     //caminho das imagens das ferramentas
     private String[] imagens = {
                         "icons8-button-50.png",
@@ -139,10 +139,7 @@ public class Tela extends Application{
 	String[] file;
 	@Override						   
     public void init(){
-		
-	//	executor = Executors.newCachedThreadPool();
         cp =  new Compasso();
-		//tarefa = new Tarefa();
 		try{
 			descFile = Util.getDescricao(getClass().getResource("nota/desc1.txt").toURI());
 			file     = Util.getFile(getClass().getResource("icones").toURI());
@@ -190,8 +187,6 @@ public class Tela extends Application{
 	*/
 	public ScrollPane getCenter(){
 		fundo = new AnchorPane();
-		//fundo.setPrefSize(2000,2000);
-		//fundo.setPadding(new Insets(10));
         fundo.setId("fundo-id");
         ScrollPane sc = new ScrollPane();
 		
@@ -217,28 +212,7 @@ public class Tela extends Application{
 		c2 = new ColumnConstraints(300, cp.getWidth() ,Double.MAX_VALUE);	
 		r2 = new RowConstraints(300,cp.getHeight(),Double.MAX_VALUE);
 		ct.scalaEvent(c2,r2,cp);
-	/*	escala.addListener( (obsv,olv,nv)->{
-			c2.setPrefWidth( cp.getWidth()*(double)nv  );
-			r2.setPrefHeight( cp.getWidth()*(double)nv   );
-		});*/
-		
 		ct.tarefasRegua(hboxRegua,vboxRegua,cp);
-	/*	Task<ArrayList<BorderPane>> task1 = tarefa.reguaH(cp.getWidth());
-			task1.stateProperty().addListener((obs,old,nw)->{
-				if(nw==State.SUCCEEDED ){
-					hboxRegua.getChildren().addAll( task1.getValue() );
-				}
-			});
-			executor.submit(task1);
-			//cria a regua na vertical
-		Task<ArrayList<BorderPane>> task2 = tarefa.reguaV(cp.getWidth());
-			task2.stateProperty().addListener((obs,old,nw)->{
-				if(nw==State.SUCCEEDED ){
-					vboxRegua.getChildren().addAll( task2.getValue() );
-				}
-			});
-			executor.submit(task2);*/
-			
 		ct.setEscala(1d);
 		cp.getScala(ct.getEscala());
 		grid = new GridPane();
@@ -303,10 +277,6 @@ public class Tela extends Application{
 		}
 		
 		ct.eventosTop(b);
-		/*b[5].setOnMouseClicked(actionEvent->escala.set(escala.get()+0.5));
-
-		b[6].setOnMouseClicked(actionEvent->escala.set(escala.get()-0.5));*/
-
 		vbox.getChildren().addAll(getMenuBar(),tl);
 		
 		return vbox;
@@ -353,7 +323,7 @@ public class Tela extends Application{
     public  Pane getPropriedade(){
         VBox vbox = new VBox();
         vbox.getStyleClass().add("barra-prop");
-		vbox.setPrefWidth(230);
+		vbox.setPrefWidth(200);
 
 		Label labelProp = new Label("Propriedade");
 		
@@ -381,14 +351,14 @@ public class Tela extends Application{
 		Label labelX = getLabel("X");
 		Label labelY = getLabel("Y");
 
-		Spinner tfx = getSpinner();
-		Spinner tfy = getSpinner();
+		Spinner tfx = getSpinner(0,cp.getWidth(),0);
+		Spinner tfy = getSpinner(0,cp.getWidth(),0);
 		Label labelW = getLabel("Largura");
 		Label labelH = getLabel("Altura");
 
 
-		Spinner tfW = getSpinner();
-		Spinner tfH = getSpinner();
+		Spinner tfW = getSpinner(0,cp.getWidth(),0);
+		Spinner tfH = getSpinner(0,cp.getWidth(),0);
 		
 		cp.setSpinner(tfx.getValueFactory(),
 					tfy.getValueFactory(),
@@ -478,19 +448,26 @@ public class Tela extends Application{
 
 		Label labelFont = getLabel( "Familia ");
 		ObservableList<String> obsf = observableArrayList(Font.getFamilies());
-		ComboBox cbfont = new ComboBox(obsf);
+		ComboBox<String> cbfont = new ComboBox(obsf);
 		cbfont.getSelectionModel().select(0);
 
 		Label labelSize = getLabel( "Tamanho ");
-		Spinner spSize = new Spinner(1,100,12);
+		Spinner spSize = getSpinner(0,72,12);
 
 		Label labelWeigt = getLabel( "Peso ");
-		ObservableList<String> obsw = observableArrayList("Normal","Negrito","Medio");
-		ComboBox cb = new ComboBox(obsw);
+		ObservableList<FontWeight> obsw = observableArrayList(FontWeight.values());
+		ComboBox<FontWeight> cb = new ComboBox(obsw);
+		cb.getSelectionModel().select(3);
 
 		Label labelEst = getLabel( "Estilo ");
-		ObservableList<String> obse = observableArrayList("Italico","Regular");
-		ComboBox cbEstilo = new ComboBox(obse);
+		ObservableList<FontPosture> obse = observableArrayList(FontPosture.values());
+		ComboBox<FontPosture> cbEstilo = new ComboBox(obse);
+		cbEstilo.getSelectionModel().select(1);
+
+		av.setControlFonte(spSize.getValueFactory().valueProperty(),
+							cbfont.valueProperty(),
+							cb.valueProperty(),
+							cbEstilo.valueProperty());
 
 		GridPane gridFont = getGrid(true);
 		gridFont.add(labelFont,0,0);gridFont.add(cbfont,1,0);
@@ -512,8 +489,8 @@ public class Tela extends Application{
         return vbox;
     }
 	
-	public Spinner getSpinner(){
-		Spinner spinner = new Spinner(new DoubleSpinnerValueFactory(0,cp.getWidth(),0));
+	public Spinner getSpinner(double min,double max,double pref){
+		Spinner spinner = new Spinner(new DoubleSpinnerValueFactory(min,max,pref));
 		spinner.setEditable(true);
 		spinner.getStyleClass().add("toll");
 		return spinner;
@@ -550,8 +527,6 @@ public class Tela extends Application{
 		return gridPane;
 	}
 	public VBox getTool( Control n1, Control n2){
-//		n1.setPrefWidth(75);
-//		n2.setPrefWidth(75);
 		VBox v = new VBox();
 		v.getChildren().addAll(n1,n2);
 		return v; 
@@ -572,13 +547,6 @@ public class Tela extends Application{
 		Text texto = new Text("Localizador");
 		Button texto1 = new Button("Fechar");
 		ct.eventButton(texto1,fundo,paneBottom);
-		/*texto1.setOnAction(actionEvent->{
-			paneBottom.getChildren().remove(0);
-			int value = fundo.getChildren().size();
-			System.out.println("Valendo : " + value );
-			if(value>1)
-				fundo.getChildren().remove(1, value);//remove os marcadores
-		});*/
 		Label labelX = new Label("x");
 		Label labelY = new Label("y");
 		Spinner tfX = new Spinner(0,cp.getWidth(),0);
@@ -589,21 +557,6 @@ public class Tela extends Application{
 		CheckBox ck1 = new CheckBox("Marcar");
 		CheckBox ck2 = new CheckBox("Posicionar");
 		ct.eventButton1(button,fundo,ck1,ck2,tfX,tfY);
-	/*	button.setOnMouseClicked( actionEvent->{
-			Double x = (double)tfX.getValue();
-			Double y = (double)tfY.getValue();
-			if( ck1.isSelected() ){
-				Circle c  = new Circle(x.doubleValue(),y.doubleValue(),5);
-				c.setFill(Color.RED);
-				fundo.getChildren().add(c);
-			}
-			
-			if( ck2.isSelected() ){
-
-			}
-		});*/
-		
-		
 		VBox vbox = new VBox();
 		vbox.getChildren().addAll(ck1,ck2);
 		//hbox
@@ -620,8 +573,6 @@ public class Tela extends Application{
 		gridPane.setMargin(texto1, new Insets(4));
 		gridPane.setValignment(texto1, VPos.CENTER);
 		gridPane.add(texto1,1,0);
-
-		//
 		if( paneBottom.getChildren().size()>1 )
 			paneBottom.getChildren().remove(0);
 		paneBottom.getChildren().add(0,gridPane);

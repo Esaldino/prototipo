@@ -14,6 +14,7 @@ public class ControlTexto{
 	}
 	
 	public void link(StringProperty control){
+		limpar();
 		tfControl = control;
 		tfControl.unbind();
 		tf.set(tfControl.get());
