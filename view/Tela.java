@@ -462,7 +462,7 @@ public class Tela extends Application{
 		Label labelEst = getLabel( "Estilo ");
 		ObservableList<FontPosture> obse = observableArrayList(FontPosture.values());
 		ComboBox<FontPosture> cbEstilo = new ComboBox(obse);
-		cbEstilo.getSelectionModel().select(1);
+		cbEstilo.getSelectionModel().select(0);
 
 		av.setControlFonte(spSize.getValueFactory().valueProperty(),
 							cbfont.valueProperty(),
