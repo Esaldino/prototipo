@@ -20,13 +20,14 @@ import prototipo.model.Chapa;
 import javafx.scene.Node;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.FontPosture;
+import javafx.scene.paint.Color;
 
 public class  Avaliador{
 	private TextField tf;
 	private ControlTexto controlTexto;
 	private ControlGeometria controlG;
 	private ControlFonte controlFonte;
-
+	private ControlFundo controlFundo;
 	public Avaliador( TextField textField){
 		tf = textField;
 	}
@@ -36,6 +37,10 @@ public class  Avaliador{
 	public void setControlTexto(StringProperty tf){
 		controlTexto = new ControlTexto(tf);
 	}
+
+	public void setControlFundo(ObjectProperty<Color> obc){
+		controlFundo = new ControlFundo(obc);
+	}
 	
 	public void setControlGeometria(Spinner ... dp){
 		controlG = new ControlGeometria(dp);
@@ -43,8 +48,9 @@ public class  Avaliador{
 	}
 
 	public void setControlFonte(ObjectProperty<Double> obs,ObjectProperty<String> obf,
-							ObjectProperty<FontWeight> obw,ObjectProperty<FontPosture> obp){
-		controlFonte = new ControlFonte(obs,obf,obw,obp);
+							ObjectProperty<FontWeight> obw,ObjectProperty<FontPosture> obp,
+							ObjectProperty<Color> obc){
+		controlFonte = new ControlFonte(obs,obf,obw,obp,obc);
 		System.out.println("ativou Fonte");
 	}
 
@@ -52,6 +58,7 @@ public class  Avaliador{
 	public void testar(Chapa chapa,GestorChapa gc){
 		//ativa as proriedades geometria
 		controlG.link(chapa,gc);
+		controlFundo.link(chapa);
 
 		//Ativas as outroas propriedades
 		Node figura = chapa.getControl();

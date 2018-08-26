@@ -383,25 +383,11 @@ public class Tela extends Application{
 		Label labelFundo = getLabel("Cor");
 		
 		ColorPicker colorPiker = getColorPicker();
-		
-		Label labelOpacity = getLabel("Opacidade");
-
-		Slider slider = new Slider(0,1,1);
-		slider.setPrefWidth(90);
-		Label labelOpacityDisplay = getLabel("0");
-
-		slider.setBlockIncrement(0.01);
-		ct.eventSlider(slider,labelOpacityDisplay);
-		
-		HBox hbox = new HBox(6);
-		hbox.getChildren().addAll(slider,labelOpacityDisplay);
+		av.setControlFundo(colorPiker.valueProperty());
 		
 		GridPane gridToll3 =getGrid(true);
 		
 		gridToll3.add(labelFundo,0,0);gridToll3.add(colorPiker,1,0);
-		gridToll3.setValignment( hbox, VPos.CENTER);
-		gridToll3.setHalignment(hbox,HPos.RIGHT);
-		gridToll3.add(labelOpacity,0,1);gridToll3.add(hbox,1,1);
 		
 		//Bordas
 		Label labelCor = getLabel("Cor");
@@ -437,8 +423,6 @@ public class Tela extends Application{
 		spinner1.getStyleClass().add("toll");
 		
 		GridPane gridToll4 =getGrid(true);
-		gridToll4.setValignment( hbox, VPos.CENTER);
-		gridToll4.setHalignment(hbox,HPos.RIGHT);
 		gridToll4.add(labelCor,0,0);gridToll4.add(colorPiker1,1,0);
 		gridToll4.add(labelEstilo,0,1);gridToll4.add(comboBox,1,1);
 		gridToll4.add(labelRaddi,0,2);gridToll4.add(hbox1,1,2);
@@ -464,16 +448,21 @@ public class Tela extends Application{
 		ComboBox<FontPosture> cbEstilo = new ComboBox(obse);
 		cbEstilo.getSelectionModel().select(0);
 
+		Label fonteCor = getLabel("Cor");
+		ColorPicker cpF = new ColorPicker(Color.BLACK);
+
 		av.setControlFonte(spSize.getValueFactory().valueProperty(),
 							cbfont.valueProperty(),
 							cb.valueProperty(),
-							cbEstilo.valueProperty());
+							cbEstilo.valueProperty(),
+							cpF.valueProperty());
 
 		GridPane gridFont = getGrid(true);
 		gridFont.add(labelFont,0,0);gridFont.add(cbfont,1,0);
 		gridFont.add(labelSize,0,1);gridFont.add(spSize,1,1);
 		gridFont.add(labelWeigt,0,2);gridFont.add(cb,1,2);
 		gridFont.add(labelEst,0,3);gridFont.add(cbEstilo,1,3);
+		gridFont.add(fonteCor,0,4);gridFont.add(cpF,1,4);
 
 					
 		//TilePane
@@ -694,13 +683,12 @@ public class Tela extends Application{
     }
     
     
-    public TextField criarFiguraTextField(){
-        TextField tf = new TextField();
-		tf.setPromptText("texto");
-        tf.setId("node");
+    public Label criarFiguraTextField(){
+    	Label tf = new Label();
 		tf.setPrefSize(130,43);
+        tf.setBackground(Util.fundo(Color.WHITE,0));
 		tf.setFocusTraversable(false);
-        tf.setEditable(false);
+        tf.setId("node");
         return tf;
     }
     
