@@ -341,7 +341,7 @@ public class Tela extends Application{
     public  Pane getPropriedade(){
         VBox vbox = new VBox();
         vbox.getStyleClass().add("barra-prop");
-		vbox.setPrefWidth(140);
+		vbox.setPrefWidth(160);
 
 		Label labelProp = new Label("Propriedade");
 		
@@ -524,8 +524,8 @@ public class Tela extends Application{
 		
 		GridPane gridPane =new GridPane();
 		if(ctr){
-			ColumnConstraints col1 = new ColumnConstraints(65);
-			ColumnConstraints col2 = new ColumnConstraints(150);
+			ColumnConstraints col1 = new ColumnConstraints(60);
+			ColumnConstraints col2 = new ColumnConstraints(110);
 			gridPane.getColumnConstraints().addAll(col1,col2);
 		}
 			
