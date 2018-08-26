@@ -55,7 +55,7 @@ public class Util {
                 desc.add(sc.next());
                 
             }
-
+            System.out.println(desc);
         return desc.toArray(  new String[desc.size()]   );
 
     }
@@ -69,7 +69,7 @@ public class Util {
 
                 desc.add(nome.toURL().toString());
             }
-
+        desc.forEach( item->System.out.println(item));
         return desc.toArray(  new String[desc.size()]  );
     }
 

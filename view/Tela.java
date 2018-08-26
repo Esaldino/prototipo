@@ -135,18 +135,11 @@ public class Tela extends Application{
                                     "Círculo",
 									"Localizador"
                                };
-	String[] descFile;
-	String[] file;
+	
+	
 	@Override						   
     public void init(){
         cp =  new Compasso();
-		try{
-			descFile = Util.getDescricao(getClass().getResource("nota/desc1.txt").toURI());
-			file     = Util.getFile(getClass().getResource("icones").toURI());
-		}catch(Exception ex ){
-			ex.printStackTrace();
-			System.exit(1);
-		}
 		ct = new ControlTela();
     }
 	
@@ -267,17 +260,43 @@ public class Tela extends Application{
 	
 	public VBox getTop(){
 		VBox vbox  = new VBox();
-		
-		FlowPane tl = new FlowPane(10,2);
-	
-		Label[] b = new Label[file.length];
-		for(int i = 0;i<file.length;i++){
-			b[i] = getImageMenu(file[i],descFile[i]);
-			tl.getChildren().add(b[i]);
+		AnchorPane anchor = new AnchorPane();
+		HBox tl = new HBox();
+		try{
+			String[] descFile  = Util.getDescricao(getClass().getResource("nota/icons1.txt").toURI());
+			String[] file    = Util.getFile(getClass().getResource("icones1/").toURI());
+			
+			Label[] b = new Label[file.length];
+			for(int i = 0;i<file.length;i++){
+				b[i] = getImage(file[i],descFile[i]);
+				tl.getChildren().add(b[i]);
+			}
+			ct.eventosTopFicheiro(b);
+		}catch(Exception ex ){
+			ex.printStackTrace();
+			System.exit(1);
 		}
-		
-		ct.eventosTop(b);
-		vbox.getChildren().addAll(getMenuBar(),tl);
+
+		HBox t2 = new HBox();
+		try{
+			String[] descFile  = Util.getDescricao(getClass().getResource("nota/icons2.txt").toURI());
+			String[] file    = Util.getFile(getClass().getResource("icones2/").toURI());
+			
+			Label[] b = new Label[file.length];
+			for(int i = 0;i<file.length;i++){
+				b[i] = getImage(file[i],descFile[i]);
+				t2.getChildren().add(b[i]);
+			}
+			ct.eventosTopFiguras(b,cp);
+		}catch(Exception ex ){
+			ex.printStackTrace();
+			System.exit(1);
+		}
+
+		anchor.setLeftAnchor(tl,10d);
+		anchor.setRightAnchor(t2,10d);
+		anchor.getChildren().addAll(tl,t2);
+		vbox.getChildren().addAll(getMenuBar(),anchor);
 		
 		return vbox;
 	}
@@ -297,7 +316,7 @@ public class Tela extends Application{
         return vbox;
     }
 
-    public Label getImageMenu( String file,String descricao){
+    public Label getImage( String file,String descricao){
         Image image = new Image(file);
         ImageView mv = new ImageView(image);
         Label label = new Label("",mv);
@@ -312,7 +331,10 @@ public class Tela extends Application{
 		url= "image/"+url;
         Image image = new Image(getClass().getResourceAsStream(url));
         ImageView mv = new ImageView(image);
+        mv.setFitHeight(30);
+        mv.setFitWidth(30);
         Label label = new Label("",mv);
+        label.setPrefSize(30,30);
         Tooltip tool = new Tooltip(descricao);
         label.setTooltip(tool);
         label.setId("label-id");
@@ -699,7 +721,7 @@ public class Tela extends Application{
         mv.setFitHeight(60);
         mv.setFitWidth(100);
         Label labelImage = new Label("",mv);
-		labelImage.setPrefSize(100,60);
+        labelImage.setPrefSize(100,60);
         labelImage.setId("node");
         mv.fitWidthProperty().bindBidirectional(labelImage.prefWidthProperty());
         mv.fitHeightProperty().bindBidirectional( labelImage.prefHeightProperty());
