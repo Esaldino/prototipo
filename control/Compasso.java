@@ -163,8 +163,13 @@ public class Compasso {
     public void setDefinition() {
        
         folha.setOnMouseEntered(mouseEvent->{
-			if( posicionador!=100)
-				criar(mouseEvent.getX(),mouseEvent.getY());
+			if( posicionador!=100){
+				double x = mouseEvent.getX()-20;
+				double y = mouseEvent.getY()-20;
+				
+				if( x>=0&&y>=20)
+					criar(x,y);
+			}
             System.out.println("movendo x " + mouseEvent.getX() + " movendo y " + mouseEvent.getY() );
         });
 		
@@ -492,8 +497,8 @@ public class Compasso {
 		
 		
 		Chapa chapa  = new Chapa();
-		chapa.setLayoutX(mouseX-20);
-		chapa.setLayoutY(mouseY-20);
+		chapa.setLayoutX(mouseX);
+		chapa.setLayoutY(mouseY);
 		
 		Rotate r = new Rotate(0,0,0);
 		
@@ -645,7 +650,7 @@ public class Compasso {
 	
 	public void redimensionarDelimitador(double dx,double dy,Chapa pane){
 		  //redimensiona as figuras
-		  
+			
 
 			Dimension2D d2d = gc.getDimension(pane);
 			Delimitador deli = pane.get();
