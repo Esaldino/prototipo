@@ -62,14 +62,14 @@ public class Util {
             int tam = new File(Util.class.getResource("../ficheiro/"+nota).toURI()).list().length;
             String[] dados;
             file = new String[tam][2];
-            System.out.println("Entrou nota : " + nota + " tamanho : " + tam); 
+    //        System.out.println("Entrou nota : " + nota + " tamanho : " + tam); 
             Scanner sc = new Scanner( Util.class.getResourceAsStream("../ficheiro/nota/"+nota+".txt") )
                                         .useDelimiter(";");
             while( sc.hasNext() ){
                 dados = sc.next().split("-"); 
                 file[i][0] = Util.class.getResource("../ficheiro/"+nota+"/"+dados[1]).toString();
                 file[i][1] = dados[0];
-                System.out.println( file[i][0]  + "  " + file[i][1] );
+     //           System.out.println( file[i][0]  + "  " + file[i][1] );
                 i++; 
             }
             sc.close();

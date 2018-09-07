@@ -1,1 +1,0 @@
-Novo;Salvar;Abrir;Anular;Refazer;ampliar;diminuir;Avançar;Voltar,roda esquerda,rodar direita

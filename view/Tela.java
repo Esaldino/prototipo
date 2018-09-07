@@ -91,8 +91,9 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.FontPosture;
 import javafx.scene.control.ContextMenu;
 import javafx.stage.FileChooser;
-
+import javafx.geometry.Pos;
 import javafx.scene.control.MenuItem;
+import javafx.scene.text.TextAlignment;
 /**
  *
  * @author Esaldino
@@ -312,7 +313,7 @@ public class Tela extends Application{
 		
 		//Descriao
 		
-		GridPane gridToll2 =getGrid(true);
+		GridPane gridToll2 =getGrid(true,5);
 		Label labelTipo = getLabel("Tipo");
 		TextField tft = new TextField();
 		tft.setPrefColumnCount(9);
@@ -348,7 +349,7 @@ public class Tela extends Application{
 					tfW.getValueFactory(),
 					tfH.getValueFactory());
 		av.setControlGeometria(tfx,tfy,tfW,tfH);
-		GridPane gridToll = getGrid(false);
+		GridPane gridToll = getGrid(false,5);
 	
 		VBox v1 = getTool(labelX,tfx);
 		VBox v2 = getTool(labelY,tfy);
@@ -368,11 +369,13 @@ public class Tela extends Application{
 		ColorPicker colorPiker = getColorPicker();
 		av.setControlFundo(colorPiker.valueProperty());
 		
-		GridPane gridToll3 =getGrid(true);
+		GridPane gridToll3 =getGrid(true,5);
 		
 		gridToll3.add(labelFundo,0,0);gridToll3.add(colorPiker,1,0);
 		
 		//Bordas
+		
+		VBox vBorder = new VBox(8);
 		Label labelCor = getLabel("Cor");
 
 		ColorPicker colorPiker1 = getColorPicker();
@@ -405,12 +408,44 @@ public class Tela extends Application{
 		Spinner spinner1 = new Spinner(0,5,1);
 		spinner1.getStyleClass().add("toll");
 		
-		GridPane gridToll4 =getGrid(true);
+		GridPane gridToll4 =getGrid(true,5);
 		gridToll4.add(labelCor,0,0);gridToll4.add(colorPiker1,1,0);
 		gridToll4.add(labelEstilo,0,1);gridToll4.add(comboBox,1,1);
 		gridToll4.add(labelRaddi,0,2);gridToll4.add(hbox1,1,2);
 		gridToll4.add(labelLArgura,0,3);gridToll4.add(spinner1,1,3);
-	
+		
+		
+		GridPane ladosBorder = getGrid(false,1);
+		ladosBorder.setAlignment(Pos.CENTER);
+		ladosBorder.setGridLinesVisible(true);
+		
+		Label[] labelLados = new Label[4];
+		String nomes = "";
+		for( int i=0;i<labelLados.length;i++){
+			switch(i+1){
+				case 1:nomes = "Right";break;
+				case 2:nomes = "Left";break;
+				case 3:nomes = "Top";break;
+				case 4:nomes = "Bottom";break;
+			}
+			labelLados[i] = getLabel(nomes);
+			labelLados[i].setPrefSize(50,23);
+			labelLados[i].setTextAlignment(TextAlignment.CENTER);
+			labelLados[i].setAlignment(Pos.CENTER);
+			labelLados[i].setStyle( "-fx-background-color:red");
+		}
+
+		ladosBorder.setHalignment(labelLados[2],HPos.CENTER);
+		ladosBorder.add(labelLados[2],1,0);
+		ladosBorder.setHalignment(labelLados[1],HPos.CENTER);
+		ladosBorder.add(labelLados[1],0,1);
+		ladosBorder.setHalignment(labelLados[0],HPos.CENTER);
+		ladosBorder.add(labelLados[0],2,1);
+		ladosBorder.setHalignment(labelLados[3],HPos.CENTER);
+		ladosBorder.add(labelLados[3],1,2);
+		
+		vBorder.getChildren().addAll(gridToll4,ladosBorder);
+		
 		//font
 
 		Label labelFont = getLabel( "Familia ");
@@ -440,7 +475,7 @@ public class Tela extends Application{
 							cbEstilo.valueProperty(),
 							cpF.valueProperty());
 
-		GridPane gridFont = getGrid(true);
+		GridPane gridFont = getGrid(true,5);
 		gridFont.add(labelFont,0,0);gridFont.add(cbfont,1,0);
 		gridFont.add(labelSize,0,1);gridFont.add(spSize,1,1);
 		gridFont.add(labelWeigt,0,2);gridFont.add(cb,1,2);
@@ -453,7 +488,7 @@ public class Tela extends Application{
 		TitledPane tile6 = getTile("Fonte",gridFont,true);
 		TitledPane tile2 = getTile("Geomtria",gridToll,true);
 		TitledPane tile4 = getTile("Fundo",gridToll3,false);
-		TitledPane tile5 = getTile("Bordas",gridToll4,false);
+		TitledPane tile5 = getTile("Bordas",vBorder,false);
 	
 		ct.eventosTitled(tile1,tile2,tile4,tile5,tile6);
 	    vbox.getChildren().addAll(labelProp,tile1,tile2,tile6,tile4,tile5);
@@ -485,7 +520,7 @@ public class Tela extends Application{
 		return titlePane;
 	}
 	
-	public GridPane getGrid(boolean ctr){
+	public GridPane getGrid(boolean ctr,int i){
 		
 		GridPane gridPane =new GridPane();
 		if(ctr){
@@ -494,8 +529,8 @@ public class Tela extends Application{
 			gridPane.getColumnConstraints().addAll(col1,col2);
 		}
 			
-		gridPane.setVgap(5);
-		gridPane.setHgap(5);
+		gridPane.setVgap(i);
+		gridPane.setHgap(i);
 		return gridPane;
 	}
 	public VBox getTool( Control n1, Control n2){
