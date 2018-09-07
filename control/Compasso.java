@@ -49,6 +49,7 @@ import javafx.scene.transform.Scale;
 import javafx.scene.shape.Circle;
 import javafx.scene.control.SpinnerValueFactory;
 import java.text.NumberFormat;
+import prototipo.view.Figuras;
 //Controladores de propriedades
 
 
@@ -98,7 +99,7 @@ public class Compasso {
 
 	//variaveis que controlam as propriedade
 	private Avaliador av;
-    
+    private int posicionador;
     public Compasso() {
 		this.folha = new Folha();
 		Scale sc = new Scale(1,1,20d,20d);
@@ -114,6 +115,7 @@ public class Compasso {
         setDefinition();
 		ativados = 0;
         ctr = false;
+		posicionador = 100;
     }
 
     public void setSpinner(SpinnerValueFactory ...spinner){
@@ -148,22 +150,30 @@ public class Compasso {
     public int getIterador(){
         return iterador;
     }
-    
-
+	
+	public void setPosicionador(int pos){
+		posicionador=pos;
+	}
+	
+	public int getPosicionador(){
+		return posicionador;
+	}
+	
                     
     public void setDefinition() {
        
         folha.setOnMouseEntered(mouseEvent->{
+			if( posicionador!=100)
+				criar(mouseEvent.getX(),mouseEvent.getY());
             System.out.println("movendo x " + mouseEvent.getX() + " movendo y " + mouseEvent.getY() );
         });
 		
 
 		folha.setOnMouseMoved( mouseEvent->{ 
 			setPositionMouse(mouseEvent.getX(),mouseEvent.getY());
-		//	System.out.println("movendo x " + mouseEvent.getX() + " movendo y " + mouseEvent.getY() );
 		});
         
-       folha.setOnMousePressed( mouseEvent->{ 
+        folha.setOnMousePressed( mouseEvent->{ 
 			if( !ctr )
 				setIterador(9);
 			
@@ -462,7 +472,6 @@ public class Compasso {
 	}
 	
 	public void process( Chapa chapa){
-		
 		System.out.println("Processa");
 		Delimitador deli = chapa.get();
 		if( !keyCtr  )
@@ -473,14 +482,19 @@ public class Compasso {
 			av.testar(chapa,gc);
 			addAtivado();//determina o numero de objetos marcador
 		}
-		
 	}
 
-	public void criar(Control figura, ContextMenu cm){
+	public void criar( double mouseX, double mouseY){
 		
+		ContextMenu cm = null;
+		Control figura = Figuras.get(posicionador);
+		setPosicionador(100);
 		
 		
 		Chapa chapa  = new Chapa();
+		chapa.setLayoutX(mouseX-20);
+		chapa.setLayoutY(mouseY-20);
+		
 		Rotate r = new Rotate(0,0,0);
 		
 		final int tam =8;
@@ -538,7 +552,7 @@ public class Compasso {
 				}
 				cm.show( deli , mouseEvent.getScreenX() , mouseEvent.getScreenY() );
             }else
-               cm.hide();           
+         //      cm.hide();           
 
             if( keyCtr && mouseEvent.getClickCount()==2 )
                 desmarcarComp( chapa );

@@ -49,7 +49,6 @@ import javafx.scene.control.Spinner;
 import prototipo.control.Compasso;
 import prototipo.control.Util;
 import prototipo.control.Tarefa;
-import prototipo.model.Figura;
 //input
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
@@ -93,6 +92,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.stage.FileChooser;
 import javafx.geometry.Pos;
 import javafx.scene.control.MenuItem;
+import javafx.scene.Group;
 import javafx.scene.text.TextAlignment;
 /**
  *
@@ -104,13 +104,15 @@ public class Tela extends Application{
     private Label[] ferramentas;
 	private VBox paneBottom;
 	private Stage stagePrincipal;
-	private BorderPane root;
+	private BorderPane bp;
 	GridPane grid;
 	ColumnConstraints c2;
 	RowConstraints r2;
 	private VBox vboxRegua;
 	private ControlTela ct;
 	private HBox hboxRegua;
+	private boolean ctrFerramenta;
+	Group root;
 	private AnchorPane fundo;//REPRESENTA TODA A AREA DE DESENHO, onde de ENCONTRA A FOLHA
     //caminho das imagens das ferramentas
 	@Override						   
@@ -126,23 +128,32 @@ public class Tela extends Application{
    
     @Override
     public void start( Stage stage ){
-       root = new BorderPane();
-        gerenciarRoot(root);
+		root = new Group();
+        bp = new BorderPane();
+		root.getChildren().add(bp);
+        gerenciarRoot();
 		stagePrincipal = stage;
         Scene scene = new Scene( root , 600,400 );
         scene.getStylesheets().addAll(Util.getCss());
+		
+		bp.prefWidthProperty().bind(scene.widthProperty());
+		bp.prefHeightProperty().bind(scene.heightProperty());
+		
         stage.setScene(scene);
         stage.show();
-		ct.sceneEvent(scene,cp);
+		ct.sceneEvent(scene,cp,root);
+		
     }
     
-    public void gerenciarRoot(BorderPane root){
-        root.setTop( getTop() ); 
-        root.setCenter(getCenter());
-        root.setLeft( paneFerramenta() );
-        root.setRight( getPropriedade() );
+    public void gerenciarRoot(){
+		
+        bp.setTop( getTop() ); 
+        bp.setCenter(getCenter());
+        bp.setLeft( paneFerramenta() );
+        bp.setRight( getPropriedade() );
 		paneBottom = gestorRodape();
-        root.setBottom( paneBottom );
+        bp.setBottom( paneBottom );
+		
     }
 	
 
@@ -154,15 +165,12 @@ public class Tela extends Application{
 		fundo = new AnchorPane();
         fundo.setId("fundo-id");
         ScrollPane sc = new ScrollPane();
+		sc.setFocusTraversable(false);
 		
 		int tam = 34;
 		sc.setVmax(cp.getWidth()-tam);
 		sc.setHmax(cp.getHeight()-tam);
-		
-		
 
-		sc.setFocusTraversable(false);
-		
         fundo.prefWidthProperty().bind(sc.widthProperty());
         fundo.prefHeightProperty().bind(sc.heightProperty());
         fundo.getChildren().add(cp.getFolha());
@@ -272,17 +280,12 @@ public class Tela extends Application{
     
     public Pane paneFerramenta(){
       VBox vbox = new VBox();
-        EventosFerramenta eventos = new EventosFerramenta();
         try{
 			String[][] descFile  = Util.getIcn3();
 			ferramentas = new Label[descFile.length];
 			for(int i = 0;i<descFile.length;i++){
 				ferramentas[i] = getImage(descFile[i][0],descFile[i][1]);
-	            ferramentas[i].setOnMouseClicked(eventos);
-				ferramentas[i].setOnMouseDragged( mouseEvent->{
-					System.out.println( " X : " + mouseEvent.getX() + " screenX :" + mouseEvent.getScreenX() ); 
-					System.out.println( " Y : " + mouseEvent.getY() + " screenY :" + mouseEvent.getScreenY() );
-				});
+				ct.eventoFerramenta(ferramentas[i],i,cp);
             	vbox.getChildren().add(ferramentas[i]);
 			}
 		}catch(Exception ex ){
@@ -509,6 +512,7 @@ public class Tela extends Application{
 		gridPane.setHgap(i);
 		return gridPane;
 	}
+	
 	public VBox getTool( Control n1, Control n2){
 		VBox v = new VBox();
 		v.getChildren().addAll(n1,n2);
@@ -564,7 +568,6 @@ public class Tela extends Application{
     
     
     public Pane getVisualPosiction(){	
-
         AnchorPane anhor = new AnchorPane();
         HBox hbox = new HBox(10);
         Label l1 = new Label("WIDTH: " + cp.getWidth());
@@ -580,12 +583,13 @@ public class Tela extends Application{
         anhor.getChildren().add(hbox);
         return anhor;
     }
-	
+	/*
     
     private class EventosFerramenta implements EventHandler<MouseEvent>{
 		
         @Override
-        public void handle(MouseEvent me){
+        public void handle(MouseEvent me){ 
+			System.out.println( "Clicou na ferramenta" );
             if( me.getButton()==MouseButton.PRIMARY){
                 Label labelSource = (Label)me.getSource();
                 laco:for( int i=0; i<ferramentas.length;i++){
@@ -644,7 +648,7 @@ public class Tela extends Application{
         cp.criar(label,menuContexto);
     }
     
-     public void criarFiguraCircle() {
+    public void criarFiguraCircle() {
         Label labelCirco = new Label();
         labelCirco.setBackground(Util.fundo(Color.RED,100));
 		labelCirco.setPrefSize(50,50);
@@ -694,7 +698,7 @@ public class Tela extends Application{
         cp.criar(linha,menuContexto);
     }
     
-     public void criarFiguraCombo() {
+    public void criarFiguraCombo() {
         ComboBox<String> combo = new ComboBox<>();
         combo.setValue("comboBox");
 		combo.setPrefSize(90,40);
@@ -748,7 +752,6 @@ public class Tela extends Application{
         ContextMenu menuContexto = new ContextMenu();
 		//add contextMenu
         menuContexto.getItems().addAll(menuItem,menuItem2);
-
         cp.criar(ck,menuContexto);
     }
     
@@ -803,7 +806,7 @@ public class Tela extends Application{
 
         cp.criar(labelImage,menuContexto);
     }
-
+*/
 
 }
     
