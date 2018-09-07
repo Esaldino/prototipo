@@ -89,6 +89,10 @@ import prototipo.control.ControlTela;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.FontPosture;
+import javafx.scene.control.ContextMenu;
+import javafx.stage.FileChooser;
+
+import javafx.scene.control.MenuItem;
 /**
  *
  * @author Esaldino
@@ -108,39 +112,10 @@ public class Tela extends Application{
 	private HBox hboxRegua;
 	private AnchorPane fundo;//REPRESENTA TODA A AREA DE DESENHO, onde de ENCONTRA A FOLHA
     //caminho das imagens das ferramentas
-    private String[] imagens = {
-                        "icons8-button-50.png",
-                        "icons8-font-size-filled-50.png",
-                        "icons8-checked-checkbox-50.png",
-                        "icons8-text-box-filled-50.png",
-                        "icons8-dropdown-field-50.png",
-                        "icons8-unchecked-radio-button-filled-50.png",
-                        "icons8-xlarge-icons-filled-50.png",
-                        "icons8-unchecked-checkbox-filled-50.png",
-                        "icons8-horizontal-line-filled-50.png",
-                        "icons8-circle-filled-50.png",
-						"localizadorPoint.png"
-                        };
-    //decricao dos tooltips das ferramentas
-    private String[] descricao = {
-                                    "Botão",
-                                    "Rótulo",
-                                    "Checkbox",
-                                    "Campo texto",
-                                    "Combo box",
-                                    "Radio box",
-                                    "Imagem",
-                                    "Rectângulo",
-                                    "Linha",
-                                    "Círculo",
-									"Localizador"
-                               };
-	
-	
 	@Override						   
     public void init(){
-        cp =  new Compasso();
-		ct = new ControlTela();
+       cp =  new Compasso();
+	   ct = new ControlTela();
     }
 	
 	@Override
@@ -150,18 +125,14 @@ public class Tela extends Application{
    
     @Override
     public void start( Stage stage ){
-        root = new BorderPane();
+       root = new BorderPane();
         gerenciarRoot(root);
 		stagePrincipal = stage;
         Scene scene = new Scene( root , 600,400 );
-        scene.getStylesheets().addAll( 
-									getClass().getResource("estilo/mainfx.css").toExternalForm(),
-									getClass().getResource("estilo/regua.css").toExternalForm());
+        scene.getStylesheets().addAll(Util.getCss());
         stage.setScene(scene);
         stage.show();
 		ct.sceneEvent(scene,cp);
-
-		
     }
     
     public void gerenciarRoot(BorderPane root){
@@ -259,16 +230,14 @@ public class Tela extends Application{
 	
 	
 	public VBox getTop(){
-		VBox vbox  = new VBox();
+	VBox vbox  = new VBox();
 		AnchorPane anchor = new AnchorPane();
 		HBox tl = new HBox();
 		try{
-			String[] descFile  = Util.getDescricao(getClass().getResource("nota/icons1.txt").toURI());
-			String[] file    = Util.getFile(getClass().getResource("icones1/").toURI());
-			
+			String[][] file    = Util.getIcn1();
 			Label[] b = new Label[file.length];
 			for(int i = 0;i<file.length;i++){
-				b[i] = getImage(file[i],descFile[i]);
+				b[i] = getImage(file[i][0],file[i][1]);
 				tl.getChildren().add(b[i]);
 			}
 			ct.eventosTopFicheiro(b);
@@ -279,12 +248,10 @@ public class Tela extends Application{
 
 		HBox t2 = new HBox();
 		try{
-			String[] descFile  = Util.getDescricao(getClass().getResource("nota/icons2.txt").toURI());
-			String[] file    = Util.getFile(getClass().getResource("icones2/").toURI());
-			
+			String[][] file    = Util.getIcn2();
 			Label[] b = new Label[file.length];
 			for(int i = 0;i<file.length;i++){
-				b[i] = getImage(file[i],descFile[i]);
+				b[i] = getImage(file[i][0],file[i][1]);
 				t2.getChildren().add(b[i]);
 			}
 			ct.eventosTopFiguras(b,cp);
@@ -297,22 +264,20 @@ public class Tela extends Application{
 		anchor.setRightAnchor(t2,10d);
 		anchor.getChildren().addAll(tl,t2);
 		vbox.getChildren().addAll(getMenuBar(),anchor);
-		
 		return vbox;
 	}
     
     
     
     public Pane paneFerramenta(){
-        VBox vbox = new VBox();
-        ferramentas = new Label[imagens.length];
+      VBox vbox = new VBox();
         EventosFerramenta eventos = new EventosFerramenta();
         try{
-			String[] descFile  = Util.getDescricao(getClass().getResource("nota/icons3.txt").toURI());
-			String[] file    = Util.getFile(getClass().getResource("icones3/").toURI());
-			for(int i = 0;i<file.length;i++){
-				ferramentas[i] = getImage(file[i],descFile[i]);
-				ferramentas[i].setOnMouseClicked(eventos);
+			String[][] descFile  = Util.getIcn3();
+			ferramentas = new Label[descFile.length];
+			for(int i = 0;i<descFile.length;i++){
+				ferramentas[i] = getImage(descFile[i][0],descFile[i][1]);
+	            ferramentas[i].setOnMouseClicked(eventos);
             	vbox.getChildren().add(ferramentas[i]);
 			}
 		}catch(Exception ex ){
@@ -615,16 +580,16 @@ public class Tela extends Application{
                 laco:for( int i=0; i<ferramentas.length;i++){
                     if(labelSource == ferramentas[i]){
                         switch(i){
-                            case 0:cp.criar(criarFiguraBotao());break;
-                            case 1:cp.criar(criarFiguraLabel());break;
-                            case 2:cp.criar(criarFiguraCheckBox());break;
-                            case 3:cp.criar(criarFiguraTextField());break;
-                            case 4:cp.criar(criarFiguraCombo());break;
-                            case 5:cp.criar(criarFiguraRadio());break;
-                            case 6:cp.criar(criarFiguraImage());break;
-                            case 7:cp.criar(criarFiguraRect());break;
-                            case 8:cp.criar(criarFiguraLine());break;
-                            case 9:cp.criar(criarFiguraCircle());break;
+                            case 0:criarFiguraBotao();break;
+                            case 1:criarFiguraLabel();break;
+                            case 2:criarFiguraCheckBox();break;
+                            case 3:criarFiguraTextField();break;
+                            case 4:criarFiguraCombo();break;
+                            case 5:criarFiguraRadio();break;
+                            case 6:criarFiguraImage();break;
+                            case 7:criarFiguraRect();break;
+                            case 8:criarFiguraLine();break;
+                            case 9:criarFiguraCircle();break;
 							case 10:localPane();break;
                         }
                         break laco;
@@ -634,45 +599,90 @@ public class Tela extends Application{
         }
 	}
 	
-	public Button criarFiguraBotao() {
+	public void criarFiguraBotao() {
         Button button = new Button("Button");
 		button.setPrefSize(80,50);
 		button.setFocusTraversable(false);
+
+		MenuItem menuItem = new MenuItem("Apagar");
+        menuItem.setOnAction(actionEvent->cp.apagarFigura());//event
+		//menuitem propriedades
+        MenuItem menuItem2 = new MenuItem("Propriedade");
+		//contextMenu
+        ContextMenu menuContexto = new ContextMenu();
+		//add contextMenu
+        menuContexto.getItems().addAll(menuItem,menuItem2);
         button.setId("node");
-        return button;
+        cp.criar(button,menuContexto);
     }
 
-    public Label criarFiguraLabel() {
+    public void criarFiguraLabel() {
         Label label = new Label("Texto");
 		label.setPrefSize(50,30);
 		label.setFocusTraversable(false);
         label.setId("node");
-        return label;
+          MenuItem menuItem = new MenuItem("Apagar");
+        menuItem.setOnAction(actionEvent->cp.apagarFigura());//event
+		//menuitem propriedades
+        MenuItem menuItem2 = new MenuItem("Propriedade");
+		//contextMenu
+        ContextMenu menuContexto = new ContextMenu();
+		//add contextMenu
+        menuContexto.getItems().addAll(menuItem,menuItem2);
+        cp.criar(label,menuContexto);
     }
     
-     public Label criarFiguraCircle() {
+     public void criarFiguraCircle() {
         Label labelCirco = new Label();
         labelCirco.setBackground(Util.fundo(Color.RED,100));
 		labelCirco.setPrefSize(50,50);
 		labelCirco.setFocusTraversable(false);
-        return labelCirco;
+
+		  MenuItem menuItem = new MenuItem("Apagar");
+        menuItem.setOnAction(actionEvent->cp.apagarFigura());//event
+		//menuitem propriedades
+        MenuItem menuItem2 = new MenuItem("Propriedade");
+		//contextMenu
+        ContextMenu menuContexto = new ContextMenu();
+		//add contextMenu
+        menuContexto.getItems().addAll(menuItem,menuItem2);
+
+        cp.criar(labelCirco,menuContexto);
     }
      
-    public Label criarFiguraRect() {
+    public void criarFiguraRect() {
         Label rect = new Label();
 		rect.setPrefSize(40,50);
         rect.setBackground(Util.fundo(Color.GRAY,0));
 		rect.setFocusTraversable(false);
-        return rect;
+		MenuItem menuItem = new MenuItem("Apagar");
+        menuItem.setOnAction(actionEvent->cp.apagarFigura());//event
+		//menuitem propriedades
+        MenuItem menuItem2 = new MenuItem("Propriedade");
+		//contextMenu
+        ContextMenu menuContexto = new ContextMenu();
+		//add contextMenu
+        menuContexto.getItems().addAll(menuItem,menuItem2);
+        cp.criar(rect,menuContexto);
     }
     
-    public Separator criarFiguraLine() {
+    public void criarFiguraLine() {
         Separator linha = new Separator();
         linha.setOrientation(Orientation.HORIZONTAL);
-        return linha;
+
+          MenuItem menuItem = new MenuItem("Apagar");
+        menuItem.setOnAction(actionEvent->cp.apagarFigura());//event
+		//menuitem propriedades
+        MenuItem menuItem2 = new MenuItem("Propriedade");
+		//contextMenu
+        ContextMenu menuContexto = new ContextMenu();
+		//add contextMenu
+        menuContexto.getItems().addAll(menuItem,menuItem2);
+
+        cp.criar(linha,menuContexto);
     }
     
-     public ComboBox criarFiguraCombo() {
+     public void criarFiguraCombo() {
         ComboBox<String> combo = new ComboBox<>();
         combo.setValue("comboBox");
 		combo.setPrefSize(90,40);
@@ -680,38 +690,77 @@ public class Tela extends Application{
         combo.setEditable(false);
 		combo.setFocusTraversable(false);
         combo.getSelectionModel().selectFirst();
-        return combo;
+
+        MenuItem menuItem = new MenuItem("Apagar");
+        menuItem.setOnAction(actionEvent->cp.apagarFigura());//event
+		//menuitem propriedades
+        MenuItem menuItem2 = new MenuItem("Propriedade");
+		//contextMenu
+        ContextMenu menuContexto = new ContextMenu();
+		//add contextMenu
+        menuContexto.getItems().addAll(menuItem,menuItem2);
+
+        cp.criar(combo,menuContexto);
     }
      
-    public RadioButton criarFiguraRadio() {
+    public void criarFiguraRadio() {
         RadioButton radio = new RadioButton("radio");
 		radio.setPrefSize(100,50);
         radio.setId("node");
 		radio.setFocusTraversable(false);
         radio.setSelected(true);
-        return radio;
+
+        MenuItem menuItem = new MenuItem("Apagar");
+        menuItem.setOnAction(actionEvent->cp.apagarFigura());//event
+		//menuitem propriedades
+        MenuItem menuItem2 = new MenuItem("Propriedade");
+		//contextMenu
+        ContextMenu menuContexto = new ContextMenu();
+		//add contextMenu
+        menuContexto.getItems().addAll(menuItem,menuItem2);
+
+        cp.criar(radio,menuContexto);
     }
      
-    public CheckBox criarFiguraCheckBox() {
+    public void criarFiguraCheckBox() {
         CheckBox ck = new CheckBox("check-box");
 		ck.setPrefSize(100,60);
 		ck.setFocusTraversable(false);
         ck.setId("node");
-        return ck;
+
+        MenuItem menuItem = new MenuItem("Apagar");
+        menuItem.setOnAction(actionEvent->cp.apagarFigura());//event
+		//menuitem propriedades
+        MenuItem menuItem2 = new MenuItem("Propriedade");
+		//contextMenu
+        ContextMenu menuContexto = new ContextMenu();
+		//add contextMenu
+        menuContexto.getItems().addAll(menuItem,menuItem2);
+
+        cp.criar(ck,menuContexto);
     }
     
     
-    public Label criarFiguraTextField(){
+    public void criarFiguraTextField(){
     	Label tf = new Label();
 		tf.setPrefSize(130,43);
         tf.setBackground(Util.fundo(Color.WHITE,0));
 		tf.setFocusTraversable(false);
         tf.setId("node");
-        return tf;
+          MenuItem menuItem = new MenuItem("Apagar");
+        menuItem.setOnAction(actionEvent->cp.apagarFigura());//event
+		//menuitem propriedades
+        MenuItem menuItem2 = new MenuItem("Propriedade");
+		//contextMenu
+        ContextMenu menuContexto = new ContextMenu();
+		//add contextMenu
+        menuContexto.getItems().addAll(menuItem,menuItem2);
+
+        cp.criar(tf,menuContexto);
     }
     
-    public Label criarFiguraImage(){
-        Image image = new Image( getClass().getResourceAsStream("image/photos1.png"));
+    public void criarFiguraImage(){
+        Image image = new Image( getClass().getResourceAsStream("../ficheiro/image/photos1.png"));
         ImageView mv = new ImageView(image);
         mv.setId("node");
         mv.setFitHeight(60);
@@ -721,8 +770,29 @@ public class Tela extends Application{
         labelImage.setId("node");
         mv.fitWidthProperty().bindBidirectional(labelImage.prefWidthProperty());
         mv.fitHeightProperty().bindBidirectional( labelImage.prefHeightProperty());
-        return labelImage;
+        MenuItem menuItem = new MenuItem("Apagar");
+        menuItem.setOnAction(actionEvent->cp.apagarFigura());//event
+		//menuitem propriedades
+        MenuItem menuItem2 = new MenuItem("Propriedade");
+        MenuItem menuItem3 = new MenuItem("Alterar foto");
+        menuItem3.setOnAction(actionEvent->{
+        		FileChooser fs = new FileChooser();
+        		String dados =Util.processaImage(fs.showOpenDialog(stagePrincipal));
+        		if(!dados.isEmpty()){
+        			Image image1 = new Image(dados);
+        			mv.setImage(image1);
+        		}
+        		
+        });
+		//contextMenu
+        ContextMenu menuContexto = new ContextMenu();
+		//add contextMenu
+        menuContexto.getItems().addAll(menuItem,menuItem3,menuItem2);
+
+        cp.criar(labelImage,menuContexto);
     }
+
+
 }
     
    

@@ -1,0 +1,53 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 28/jul/2018, 22:07:37
+    Author     : Esaldino
+*/
+.barra-prop{
+	-fx-border-style:solid;
+	-fx-border-color:rgb(100,100,100,.4) rgb(0,0,0,.0) rgb(0,0,0,.0) rgb(0,0,0,.0);
+
+}
+#grid-center{
+	-fx-background-color:black;
+}
+
+#grelha-id{
+    -fx-cursor:w-resize;
+    -fx-background-color: blue;
+}
+
+.toll-label{
+	-fx-font-size:13;
+}
+
+.titled-pane{
+	-fx-font-size:13;
+}
+
+.color-picker{
+	-fx-font-size:13;
+}
+.toll{
+	-fx-font-size:13;
+}
+#node{
+
+}
+
+#label-id:hover{
+     -fx-background-color: rgb(0,0,0,.2);
+}
+
+#folha-id{
+} 
+
+#fundo-id{
+	-fx-background-color:rgb(191,191,191);
+}
+
+

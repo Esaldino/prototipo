@@ -318,29 +318,6 @@ public class Compasso {
     }
     
     /*Menu contexto para as figuras*/
-    public ContextMenu getMenuContexto1(){
-		//menuitem apagar figura
-        MenuItem menuItem = new MenuItem("Apagar");
-        menuItem.setOnAction(actionEvent->apagarFigura());//event
-		//menuitem propriedades
-        MenuItem menuItem2 = new MenuItem("Propriedade");
-		//menuitem recuar
-        MenuItem menuItem3 = new MenuItem("Recuar");
-		menuItem3.setOnAction(actionEvent->recuarFigura());//event
-		//menusItem rodar
-        MenuItem menuItem6 = new MenuItem("Rodar 90º direita");
-        menuItem6.setOnAction(actionEvent->rodar(90));//event
-        MenuItem menuItem7 = new MenuItem("Rodar 90º esquerda");
-		menuItem7.setOnAction(actionEvent->rodar(-90));
-        //menuItem avancar
-        MenuItem menuItem4 = new MenuItem(Util.codeUTF_8("Avançar"));
-        menuItem4.setOnAction(actionEvent->avancarFigura());//event
-		//contextMenu
-        ContextMenu menuContexto = new ContextMenu();
-		//add contextMenu
-        menuContexto.getItems().addAll(menuItem,menuItem4,menuItem3,menuItem6,menuItem7,menuItem2);
-        return menuContexto;
-    }
 
 
     public void apagarFigura(){
@@ -502,7 +479,7 @@ public class Compasso {
 		
 	}
 
-	public void criar(Control figura){
+	public void criar(Control figura, ContextMenu cm){
 		
 		
 		
@@ -557,17 +534,16 @@ public class Compasso {
         
         
         deli.setOnMouseClicked( mouseEvent->{
-            ContextMenu mc = getMenuContexto1();
             if( mouseEvent.getButton()==MouseButton.SECONDARY ){
 				if( !deli.isAtivado() ){
 					deli.ativar();
 					ativados++;//determina o numero de objetos deli
 				}
-				mc.show( deli , mouseEvent.getScreenX() , mouseEvent.getScreenY() );
+				cm.show( deli , mouseEvent.getScreenX() , mouseEvent.getScreenY() );
             }else
-               mc.hide();           
+               cm.hide();           
 
-            if( !keyCtr && mouseEvent.getClickCount()==2 )
+            if( keyCtr && mouseEvent.getClickCount()==2 )
                 desmarcarComp( chapa );
             
         });

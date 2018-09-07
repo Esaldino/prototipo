@@ -1,0 +1,1 @@
+Botão-icon1.png;label-icon2.png;CheckBox-icon3.png;textfield-icon4.png;combobox-icon5.png;radiobutton-icon6.png;imagem-icon7.png;retangle-icon8.png;linha-icon9.png;circulo-icon10.png;

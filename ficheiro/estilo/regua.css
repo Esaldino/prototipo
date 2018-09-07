@@ -1,0 +1,22 @@
+.label-regua{
+	-fx-text-fill:rgb(78,78,78);
+	-fx-font-size:10;
+}
+.regua{
+	-fx-background-color:black;
+}
+
+.border-regua{
+	-fx-border-color:rgb(78,78,78) rgba(0,0,0,.0) rgba(0,0,0,.0) rgba(0,0,0,.0);
+}
+
+.border-regua1{
+	-fx-border-color: rgba(0,0,0,.0)  rgba(0,0,0,.0) rgba(0,0,0,.0) rgb(78,78,78);
+}
+.pane-regua1{
+	-fx-border-color:rgba(0,0,0,.0) rgb(78,78,78) rgba(0,0,0,.0)  rgba(0,0,0,.0);
+}
+
+.pane-regua{
+	-fx-border-color:rgba(0,0,0,.0) rgba(0,0,0,.0) rgb(78,78,78) rgba(0,0,0,.0);
+}
