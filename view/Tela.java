@@ -279,6 +279,10 @@ public class Tela extends Application{
 			for(int i = 0;i<descFile.length;i++){
 				ferramentas[i] = getImage(descFile[i][0],descFile[i][1]);
 	            ferramentas[i].setOnMouseClicked(eventos);
+				ferramentas[i].setOnMouseDragged( mouseEvent->{
+					System.out.println( " X : " + mouseEvent.getX() + " screenX :" + mouseEvent.getScreenX() ); 
+					System.out.println( " Y : " + mouseEvent.getY() + " screenY :" + mouseEvent.getScreenY() );
+				});
             	vbox.getChildren().add(ferramentas[i]);
 			}
 		}catch(Exception ex ){
@@ -414,37 +418,9 @@ public class Tela extends Application{
 		gridToll4.add(labelRaddi,0,2);gridToll4.add(hbox1,1,2);
 		gridToll4.add(labelLArgura,0,3);gridToll4.add(spinner1,1,3);
 		
-		
-		GridPane ladosBorder = getGrid(false,1);
-		ladosBorder.setAlignment(Pos.CENTER);
-		ladosBorder.setGridLinesVisible(true);
-		
-		Label[] labelLados = new Label[4];
-		String nomes = "";
-		for( int i=0;i<labelLados.length;i++){
-			switch(i+1){
-				case 1:nomes = "Right";break;
-				case 2:nomes = "Left";break;
-				case 3:nomes = "Top";break;
-				case 4:nomes = "Bottom";break;
-			}
-			labelLados[i] = getLabel(nomes);
-			labelLados[i].setPrefSize(50,23);
-			labelLados[i].setTextAlignment(TextAlignment.CENTER);
-			labelLados[i].setAlignment(Pos.CENTER);
-			labelLados[i].setStyle( "-fx-background-color:red");
-		}
+		ButtonBorders bd = new ButtonBorders();
 
-		ladosBorder.setHalignment(labelLados[2],HPos.CENTER);
-		ladosBorder.add(labelLados[2],1,0);
-		ladosBorder.setHalignment(labelLados[1],HPos.CENTER);
-		ladosBorder.add(labelLados[1],0,1);
-		ladosBorder.setHalignment(labelLados[0],HPos.CENTER);
-		ladosBorder.add(labelLados[0],2,1);
-		ladosBorder.setHalignment(labelLados[3],HPos.CENTER);
-		ladosBorder.add(labelLados[3],1,2);
-		
-		vBorder.getChildren().addAll(gridToll4,ladosBorder);
+		vBorder.getChildren().addAll(gridToll4,bd.get());
 		
 		//font
 
@@ -636,6 +612,7 @@ public class Tela extends Application{
 	
 	public void criarFiguraBotao() {
         Button button = new Button("Button");
+		
 		button.setPrefSize(80,50);
 		button.setFocusTraversable(false);
 

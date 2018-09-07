@@ -62,7 +62,6 @@ public class Util {
             int tam = new File(Util.class.getResource("../ficheiro/"+nota).toURI()).list().length;
             String[] dados;
             file = new String[tam][2];
-    //        System.out.println("Entrou nota : " + nota + " tamanho : " + tam); 
             Scanner sc = new Scanner( Util.class.getResourceAsStream("../ficheiro/nota/"+nota+".txt") )
                                         .useDelimiter(";");
             while( sc.hasNext() ){

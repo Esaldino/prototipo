@@ -48,6 +48,7 @@ import javafx.scene.Group;
 import javafx.scene.transform.Scale;
 import javafx.scene.shape.Circle;
 import javafx.scene.control.SpinnerValueFactory;
+import java.text.NumberFormat;
 //Controladores de propriedades
 
 
@@ -152,13 +153,10 @@ public class Compasso {
                     
     public void setDefinition() {
        
-        folha.setOnMouseMoved(mouseEvent->{
-             setPositionMouse( mouseEvent.getX(),mouseEvent.getY() );
+        folha.setOnMouseEntered(mouseEvent->{
+            System.out.println("movendo x " + mouseEvent.getX() + " movendo y " + mouseEvent.getY() );
         });
 		
-		folha.setOnMouseEntered( mouseEvent->{
-	//		System.out.println("Entrou na folha");
-		});	
 
 		folha.setOnMouseMoved( mouseEvent->{ 
 			setPositionMouse(mouseEvent.getX(),mouseEvent.getY());
@@ -279,6 +277,7 @@ public class Compasso {
     public double getWidth(){
         return folha.getPrefWidth();
     }
+	
     public double getHeight(){
         return folha.getPrefHeight();
     }
@@ -286,6 +285,7 @@ public class Compasso {
     public Folha getFolha(){
         return folha;
     }
+	
     public void ativarMarcador(){
         setIterador(9);
     }
@@ -303,10 +303,11 @@ public class Compasso {
     }  
     
     public void setPositionMouse(double x, double y ){
-        getX().set(String.format("%g",x));
-        getY().set(String.format("%g",y));
+		NumberFormat nf = NumberFormat.getInstance();
+		nf.setMaximumFractionDigits(1);
+        getX().set(nf.format(x));
+        getY().set(nf.format(y));
     }
-    
     
     public void setKeyCtr(boolean estado){
         this.keyCtr = estado;
@@ -318,8 +319,6 @@ public class Compasso {
     }
     
     /*Menu contexto para as figuras*/
-
-
     public void apagarFigura(){
 	    LOGGER.info("figura apagada");
 		   try{
@@ -333,8 +332,6 @@ public class Compasso {
 		   }
     }
     
- 
-   
     public void desmarcarTodos(){
 		try{
 			for(Chapa chapa : gc.getAll() ){
