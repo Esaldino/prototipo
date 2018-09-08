@@ -166,11 +166,9 @@ public class Compasso {
 			if( posicionador!=100){
 				double x = mouseEvent.getX()-20;
 				double y = mouseEvent.getY()-20;
-				
 				if( x>=0&&y>=20)
 					criar(x,y);
 			}
-            System.out.println("movendo x " + mouseEvent.getX() + " movendo y " + mouseEvent.getY() );
         });
 		
 
@@ -488,11 +486,13 @@ public class Compasso {
 			addAtivado();//determina o numero de objetos marcador
 		}
 	}
-
+	
 	public void criar( double mouseX, double mouseY){
 		
-		ContextMenu cm = null;
-		Control figura = Figuras.get(posicionador);
+		
+		Control figura = Figuras.get(posicionador,this);
+		ContextMenu cm = Figuras.getMenu();
+		
 		setPosicionador(100);
 		
 		
@@ -556,8 +556,8 @@ public class Compasso {
 					ativados++;//determina o numero de objetos deli
 				}
 				cm.show( deli , mouseEvent.getScreenX() , mouseEvent.getScreenY() );
-            }else
-         //      cm.hide();           
+            }else if( cm!=null )
+               cm.hide();           
 
             if( keyCtr && mouseEvent.getClickCount()==2 )
                 desmarcarComp( chapa );
@@ -570,10 +570,8 @@ public class Compasso {
             if( ctr  )
                 return;
 			if(!deli.isAtivado()){
-				System.out.println("Estado delimitador : " + deli.isAtivado() );
 				return;
 			}
-			System.out.println("Nao parou " );
 			int i=0;
 			while( i<tam ){	
 				if(mouseEvent.getSource()==circle[i]){
@@ -958,14 +956,6 @@ public class Compasso {
             sh.setValue(deli.getHeight());
 			
 	}
-	public void visualizar( Chapa chapa){
-		Delimitador deli = chapa.get();
-		Dimension2D dm = gc.getDimension(chapa);
-		Control figura = chapa.getControl();
-		out.println("\n\nx figura : " + figura.getLayoutX() + " y figura" + figura.getLayoutY() );
-		out.println("w figura : " + figura.getPrefWidth() + " h figura" + figura.getPrefHeight() );
-		out.println("x  : " + deli.getX() + " y " + deli.getY() );
-		out.println("x  : " + deli.getLayoutBounds() );
-		
-	}
+	
+
 }

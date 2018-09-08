@@ -103,7 +103,7 @@ public class Tela extends Application{
     private Compasso cp;
     private Label[] ferramentas;
 	private VBox paneBottom;
-	private Stage stagePrincipal;
+	private static Stage stagePrincipal;
 	private BorderPane bp;
 	GridPane grid;
 	ColumnConstraints c2;
@@ -144,6 +144,10 @@ public class Tela extends Application{
 		ct.sceneEvent(scene,cp,root);
 		
     }
+	
+	public static Stage getStage(){
+		return stagePrincipal;
+	}
     
     public void gerenciarRoot(){
 		
@@ -153,7 +157,6 @@ public class Tela extends Application{
         bp.setRight( getPropriedade() );
 		paneBottom = gestorRodape();
         bp.setBottom( paneBottom );
-		
     }
 	
 
